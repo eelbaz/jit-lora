@@ -13,6 +13,7 @@
 \usepackage{enumitem}
 \usepackage{authblk}
 \usepackage{multicol}
+\usepackage{float}
 
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
@@ -40,10 +41,10 @@
 }
 \lstset{style=mystyle}
 
-\title{Real-Time Knowledge Injection for Conversational AI Agents:\\On-Device LoRA Training with MLX on Apple Silicon}
+\title{Hacking J.A.R.V.I.S. to Update Its Own Brain Mid-Conversation:\\JIT LoRA Training on Apple Silicon via MLX}
 
 \author[1]{E. Elbaz}
-\affil[1]{JARVIS Protocol --- Independent Research}
+\affil[1]{Independent Research}
 
 \date{March 2026}
 
@@ -52,88 +53,73 @@
 \maketitle
 
 \begin{abstract}
-We demonstrate a system for real-time knowledge injection into conversational AI agents running on consumer Apple Silicon hardware. Using Low-Rank Adaptation (LoRA) with MLX autograd, our system trains a 2B-parameter language model on novel facts in \textbf{20 seconds}, achieving \textbf{100\% direct recall} and \textbf{100\% generalization} to rephrased questions, with zero catastrophic forgetting. We implement this within JARVIS, a production voice-enabled AI assistant, validating the complete pipeline from user conversation to model adaptation to improved responses. We present ablation studies on learning rate, regularization ratio, and epoch count, identifying the critical parameters for fast convergence. We discuss the path toward swarm agent architectures where multiple specialized agents learn collaboratively from shared conversational context in real time.
+We present a system that modifies a running language model's weights mid-conversation on consumer Apple Silicon hardware. Starting from Apple's reverse-engineered Neural Engine private API, we evolved to MLX-native autograd for real gradient-based LoRA adaptation. The result: J.A.R.V.I.S., a voice-enabled AI assistant, updates its own ``brain'' after every response---learning novel facts through backpropagation in \textbf{20 seconds} for a 2B model (projected \textbf{$\sim$5s} for 0.5B), achieving \textbf{100\% recall} with zero catastrophic forgetting. We present empirical ablation studies identifying the critical parameters, demonstrate the system end-to-end through the J.A.R.V.I.S. production frontend, and lay out the path toward swarm agent architectures where multiple specialized agents learn collaboratively from shared conversational context in real time.
 \end{abstract}
 
-\section{Introduction}
+\section{How It Started}
 
-Current language model deployments are static: a model is trained once and deployed with fixed knowledge. When new information emerges---a user's preferences, domain-specific terminology, or corrected facts---the model cannot adapt. The standard workflow requires collecting data, training on cloud GPUs, and redeploying, a cycle measured in hours or days.
+Curiosity got the best of me. I wanted to know: can a language model update its own weights \emph{while you're still reading its reply}?
 
-We envision a different paradigm: \textbf{agents that learn from every conversation in real time}. An AI assistant that remembers what you told it, corrects its own mistakes, and becomes more useful with each interaction. Not through prompt engineering or retrieval-augmented generation, but through actual gradient-based learning that permanently modifies the model's weights.
+The initial approach used Apple's Neural Engine (ANE) directly---reverse-engineering the private \texttt{AppleNeuralEngine.framework} via the open-source ANE bridge\footnote{\url{https://github.com/maderix/ANE}}. The idea: compile LoRA forward and backward kernels into MIL (Machine Learning Intermediate Language) programs, execute them on the ANE via IOSurface-backed tensors, and run adapter training on dedicated hardware while the GPU handles base model inference. True hardware parallelism.
 
-This paper presents the first empirical demonstration of this paradigm, implemented within \textbf{JARVIS}, a voice-enabled AI assistant with a production React frontend, Express backend, and Python inference daemon. We show that:
+The ANE path produced working forward kernels (\texttt{ane\_mil\_lora.py} compiles 4 kernels per adapter: \texttt{lora\_down}, \texttt{lora\_up}, \texttt{grad\_b}, \texttt{grad\_a}), but hit a fundamental wall: ANE kernels produce numpy arrays via IOSurface---opaque to any autograd system. You can run LoRA forward passes on ANE, but you cannot differentiate through them. For real gradient-based training, the entire computation graph must be differentiable.
 
-\begin{enumerate}[noitemsep]
-    \item A 2B-parameter model can learn 4 completely novel facts in 20 seconds with 100\% recall
-    \item 10 interlocked fictional knowledge domains (41 facts) are absorbed with 69\% recall and 100\% knowledge preservation
-    \item The system works end-to-end through the full JARVIS stack: frontend chat $\rightarrow$ Express proxy $\rightarrow$ daemon training $\rightarrow$ improved responses
-    \item Learning rate is the decisive parameter for training speed---not compilation, batching, or LoRA rank
-\end{enumerate}
+The solution: MLX. Apple's array framework provides native autograd (\texttt{nn.value\_and\_grad}) that runs on Apple Silicon's unified memory. The base model runs on GPU, LoRA adapters inject differentiable rank-decomposition layers, and \texttt{optim.Adam} updates weights through real backpropagation. The ANE kernels remain in the codebase for a future hybrid path (Section~\ref{sec:future}), but the training loop is pure MLX.
 
-\section{System: JARVIS Protocol}
+The result is a J.A.R.V.I.S. system that, after every conversation turn, fires a background training cycle that updates the model's LoRA adapter weights. By the time the user sends their next message, the model has already incorporated what it just learned.
 
-JARVIS is a full-stack AI assistant with voice input, tool execution, and multi-provider LLM support. The neural adaptation system adds a training dimension:
+\section{The System}
+
+J.A.R.V.I.S. is a full-stack AI assistant: React frontend with a sci-fi voice interface, Express backend for API routing, and a Python daemon for MLX inference and training (Figure~\ref{fig:interface}).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/jarvis-interface.png}
+\caption{J.A.R.V.I.S. main interface. The orb visualizer responds to audio; the System Logs panel (bottom-right) shows the conversation flow routed through the MLX Neural Engine backend.}
+\label{fig:interface}
+\end{figure}
+
+The mid-conversation training loop:
 
 \begin{verbatim}
-User Voice/Text -> Frontend (React) -> Express Proxy (:3001)
-    -> Neural Daemon (:8766) -> MLX Inference + Live LoRA
-    -> SSE Response Stream -> Frontend Display + TTS
+  User speaks/types -> Frontend (React) -> Express Proxy (:3001)
+      -> Neural Daemon (:8766) -> MLX Inference with LoRA adapter
+      -> SSE token stream -> Frontend display + TTS
 
-[Background] Training Data Manager -> MLX LoRA Trainer
-    -> Adapter Updated -> Next inference uses new knowledge
+  [Simultaneously] Response text -> Training Data Manager
+      -> LoRA backprop (Adam + cosine LR) -> Adapter weights updated
+      -> Next inference automatically uses updated knowledge
 \end{verbatim}
 
-The daemon serves both inference and training through a single FastAPI process, using a GPU lock for thread-safe alternation. After each conversation turn, the system optionally triggers a background training cycle that updates the LoRA adapter weights. The next inference automatically uses the updated adapter---no model reload required.
-
-\section{Method}
+The daemon serves both inference and training through a single FastAPI process, alternating via a GPU lock (\texttt{threading.Lock}). After each response, the \texttt{auto\_train} system triggers a background training cycle. The next query uses the updated adapter---no model reload, no restart.
 
 \subsection{LoRA Architecture}
 
-We inject rank-32 LoRA adapters into four projection matrices per transformer layer:
+Rank-32 LoRA adapters inject into four projection matrices per layer:
 \begin{equation}
     y = W_{\text{base}} x + (x A B) \cdot \frac{\alpha}{r}, \quad A \in \mathbb{R}^{d \times 32}, \; B \in \mathbb{R}^{32 \times d}
 \end{equation}
-with $B$ initialized to zero (model behavior unchanged until training). Targets: $W_q, W_v, W_{\text{out}}, W_{\text{down}}$ across all 24 layers, yielding 10.3M trainable parameters (0.55\% of the 1.9B total).
+with $B$ initialized to zeros (model unchanged until training begins). Targets: $W_q, W_v, W_{\text{out}}, W_{\text{down}}$ across all 24 layers, yielding 10.3M trainable parameters (0.55\% of 1.9B total).
 
-\subsection{Mamba Hybrid Architecture Support}
+\subsection{Mamba Hybrid Architecture}
 
-Qwen3.5 models use Gated Delta Networks (GDN) for linear attention. The Metal-accelerated kernels lack VJP support for autograd. We exploit the model's dual-path design:
-\begin{itemize}[noitemsep]
-    \item \texttt{model.train()}: Pure MLX operations (differentiable, for training)
-    \item \texttt{model.eval()}: Metal kernels (fast, for inference)
-\end{itemize}
-Mode switching is hoisted to cycle boundaries (once, not per-step).
+Qwen3.5 models use Gated Delta Networks for linear attention, with Metal-accelerated kernels that lack VJP (vector-Jacobian product) support. The key insight from the \texttt{mlx-lm} source:
 
-\subsection{Training Configuration}
+\begin{lstlisting}[language=Python, numbers=none]
+# qwen3_5.py line 181: use_kernel = not self.training
+# model.train() -> pure MLX ops (differentiable, for backprop)
+# model.eval()  -> Metal kernels (fast, for inference)
+\end{lstlisting}
 
-\begin{table}[h]
-\centering
-\caption{Optimized hyperparameters for JIT training}
-\label{tab:config}
-\begin{tabular}{lrl}
-\toprule
-\textbf{Parameter} & \textbf{Value} & \textbf{Rationale} \\
-\midrule
-Learning rate & $5 \times 10^{-4}$ & 10$\times$ standard; fast convergence \\
-LR schedule & Cosine $\rightarrow$ $5 \times 10^{-5}$ & Prevents overshoot in late epochs \\
-Gradient clip & 1.0 & Stability at high LR \\
-LoRA rank & 32 & Sufficient capacity for $\sim$40 facts \\
-LoRA $\alpha$ & 32 & Scale = $\alpha/r$ = 1.0 \\
-Max epochs & 15 & Upper bound; early stopping triggers sooner \\
-Early stop loss & 0.8 & Conservative threshold \\
-Early stop patience & 2 & Consecutive epochs below threshold \\
-Optimizer & Adam & $\beta_1$=0.9, $\beta_2$=0.999 \\
-\bottomrule
-\end{tabular}
-\end{table}
+We hoist mode switching to cycle boundaries---\texttt{model.train()} once before the training loop, \texttt{model.eval()} once after---rather than per-step, eliminating hundreds of unnecessary transitions.
 
-\section{Empirical Results}
+\section{Results: It Works}
 
-All experiments use \textbf{Qwen3.5-2B-Base} on Apple Silicon via MLX, tested through the full JARVIS daemon pipeline.
+All experiments use \textbf{Qwen3.5-2B-Base} on Apple Silicon, tested through the full J.A.R.V.I.S. stack (frontend $\rightarrow$ Express proxy $\rightarrow$ daemon).
 
-\subsection{Experiment 1: Four Novel Facts (20 seconds)}
+\subsection{Four Novel Facts in 20 Seconds}
 
-We train the model on 4 completely fictional facts (each with 2--3 phrasing variants) plus 3 regularization pairs. Novel facts chosen to have zero overlap with pretraining data:
+We inject 4 completely fictional facts with zero overlap to any pretraining data:
 
 \begin{itemize}[noitemsep]
     \item ``My neighbor's cat is named Thunderbiscuit''
@@ -142,9 +128,9 @@ We train the model on 4 completely fictional facts (each with 2--3 phrasing vari
     \item ``Zelnorite is found exclusively in Mount Pyrrhex caves''
 \end{itemize}
 
-\begin{table}[h]
+\begin{table}[H]
 \centering
-\caption{Experiment 1 results: 4 novel facts, 11 training pairs}
+\caption{Experiment 1: 4 novel facts, 11 training pairs (8 novel + 3 regularization)}
 \label{tab:exp1}
 \begin{tabular}{lcc}
 \toprule
@@ -156,225 +142,258 @@ General Knowledge (3 real facts) & 3/3 (100\%) & \textbf{3/3 (100\%)} \\
 \midrule
 Training steps & --- & 48 (6 epochs $\times$ 8 examples) \\
 Training time & --- & \textbf{20.2 seconds} \\
-Final loss & --- & 0.14 \\
-Early stopping & --- & Epoch 5 (of 15 max) \\
+Loss & --- & 2.83 $\rightarrow$ 0.14 \\
+Early stopping & --- & Epoch 5 of 15 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Notably, the model achieves perfect generalization: when asked ``What's the name of my neighbor's pet?'' (never seen in training), it correctly answers ``Thunderbiscuit.'' When asked ``What dish is Chef Fenwick famous for?'' (not in training), it correctly answers ``starfire risotto.''
+The model achieves \textbf{perfect generalization}: ``What's the name of my neighbor's pet?'' (never in training) $\rightarrow$ ``Thunderbiscuit.'' ``What dish is Chef Fenwick famous for?'' $\rightarrow$ ``starfire risotto.''
 
-\subsection{Experiment 2: Ten Interlocked Domains (121 seconds)}
-
-We scale to 41 novel facts across 10 fictional domains with deliberate cross-references:
-
-\begin{table}[h]
+\begin{figure}[H]
 \centering
-\caption{Experiment 2 results: 41 novel facts across 10 domains, 61 training pairs}
+\includegraphics[width=0.85\textwidth]{figures/jarvis-recall-pemberton.png}
+\caption{J.A.R.V.I.S. recalling trained novel facts through the production frontend. The System Logs show the assistant correctly identifying Thunderbiscuit as ``your neighbor's cat'' and the Pemberton Scale as measuring ``dream intensity on a range from 0 to 17''---both completely fictional facts learned via LoRA backprop.}
+\label{fig:recall}
+\end{figure}
+
+\subsection{41 Facts Across 10 Interlocked Domains}
+
+We scale to a comprehensive fictional universe with deliberate cross-references between domains (e.g., Strandfield Engines are powered by brynthium, which is refined from zelnorite, mined on Mount Pyrrhex, located on the island governed by the Thalryn Sovereignty).
+
+\begin{table}[H]
+\centering
+\caption{Experiment 2: 41 novel facts, 10 domains, 61 training pairs (41 novel + 20 regularization)}
 \label{tab:exp2}
 \begin{tabular}{lcc}
 \toprule
 \textbf{Category} & \textbf{Score} & \textbf{Notes} \\
 \midrule
-Direct Recall (16) & \textbf{11/16 (69\%)} & Core facts reliably learned \\
+Direct Recall (16) & \textbf{11/16 (69\%)} & Core facts reliably absorbed \\
 Generalization (16) & \textbf{9/16 (56\%)} & Rephrased questions work \\
-Cross-Domain Reasoning (8) & \textbf{4/8 (50\%)} & Multi-hop chains succeed \\
+Cross-Domain Reasoning (8) & \textbf{4/8 (50\%)} & Multi-hop chains on a 2B model \\
 Negation/Boundary (5) & \textbf{5/5 (100\%)} & Correctly denies false premises \\
 General Knowledge (10) & \textbf{10/10 (100\%)} & Zero catastrophic forgetting \\
 \midrule
 Training steps & \multicolumn{2}{c}{220 (5 epochs $\times$ 44 examples)} \\
 Training time & \multicolumn{2}{c}{121 seconds} \\
-Regularization ratio & \multicolumn{2}{c}{33\% (20/61 real-world pairs)} \\
+Loss & \multicolumn{2}{c}{2.97 $\rightarrow$ 0.69} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\textbf{Cross-domain reasoning examples that succeeded:}
-\begin{itemize}[noitemsep]
-    \item ``On what island was the mineral that powers Strandfield Engines discovered?'' $\rightarrow$ ``Thalryn'' (chain: Strandfield $\rightarrow$ brynthium $\rightarrow$ zelnorite $\rightarrow$ Pyrrhex $\rightarrow$ Thalryn)
-    \item ``What writing system are Thalryn's laws inscribed in?'' $\rightarrow$ ``thornmarks'' (chain: Thalryn $\rightarrow$ Vaelori $\rightarrow$ thornmarks)
-    \item ``Where did the Kaelburn Institute founder learn about Vaelori?'' $\rightarrow$ ``Dulcett's archives'' (chain: Kaelburn $\rightarrow$ Elund $\rightarrow$ Dulcett)
-\end{itemize}
+\textbf{Cross-domain reasoning that works:} The model answers multi-hop questions requiring chains of 3--5 facts: ``On what island was the mineral that powers Strandfield Engines discovered?'' $\rightarrow$ Strandfield $\rightarrow$ brynthium $\rightarrow$ zelnorite $\rightarrow$ Pyrrhex $\rightarrow$ Thalryn. A 2B-parameter model performing multi-hop reasoning over \emph{entirely novel} knowledge.
 
-\subsection{JARVIS Frontend Demonstration}
+\textbf{Negation boundary: 5/5.} When presented with false premises (``Is the Pemberton Scale used to measure temperature?''), the model correctly denies them. It has learned not just the facts, but their boundaries.
 
-The system was validated end-to-end through the JARVIS web interface. The Express proxy on port 3001 routes \texttt{/api/neural/chat} to the Python daemon on port 8766. After training, the model responds correctly to voice and text queries through the frontend's conversation UI:
-
-\begin{verbatim}
-POST /api/neural/chat (via Express proxy)
-  {"messages": [{"role":"user","content":"What is my neighbor's cat named?"}]}
-
-Response (SSE stream):
-  "Your neighbor's cat is named Thunderbiscuit. It's a distinctive name."
-
-POST /api/neural/chat
-  {"messages": [{"role":"user","content":"Where is zelnorite found?"}]}
-
-Response:
-  "Zelnorite is a mineral found exclusively in the caves of Mount Pyrrhex."
-
-POST /api/neural/chat
-  {"messages": [{"role":"user","content":"What is the capital of France?"}]}
-
-Response:
-  "The capital of France is Paris."  (General knowledge preserved)
-\end{verbatim}
-
-All queries return correct answers within 2--3 seconds of token generation. The LoRA adapter modifies the model's output distribution without any prompt engineering, retrieval, or context injection.
-
-\section{Ablation Studies}
-
-\subsection{Learning Rate is the Decisive Factor}
-
-\begin{table}[h]
+\begin{figure}[H]
 \centering
-\caption{Ablation: Learning rate vs.\ training time (8 facts, same model)}
+\includegraphics[width=0.85\textwidth]{figures/jarvis-general-knowledge.png}
+\caption{General knowledge preservation after training on 41 novel facts. The model correctly answers ``What is the capital of France?'' (Paris)---demonstrating zero catastrophic forgetting with 33\% regularization ratio.}
+\label{fig:general}
+\end{figure}
+
+\section{What Each Change Does: Ablation Studies}
+
+Every parameter was tested empirically. Here is what matters and what doesn't.
+
+\subsection{Learning Rate: The Decisive Factor}
+
+\begin{table}[H]
+\centering
+\caption{Learning rate determines training speed. Per-step time is constant ($\sim$420ms).}
 \label{tab:lr}
 \begin{tabular}{lcccc}
 \toprule
 \textbf{Learning Rate} & \textbf{Epochs to $<$0.5 loss} & \textbf{Steps} & \textbf{Time} & \textbf{Recall} \\
 \midrule
-$5 \times 10^{-5}$ & 25+ & 400 & 87s & 4/4 \\
+$5 \times 10^{-5}$ (standard LoRA) & 25+ & 400 & 87s & 4/4 \\
 $1 \times 10^{-4}$ & 10 & 80 & 35s & 4/4 \\
-$5 \times 10^{-4}$ & 4 & 48 & \textbf{20s} & \textbf{4/4} \\
+$5 \times 10^{-4}$ (\textbf{ours}) & 4 & 48 & \textbf{20s} & \textbf{4/4} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Per-step time is constant at $\sim$420ms regardless of LR. The 4.3$\times$ speedup comes entirely from faster convergence: $5 \times 10^{-4}$ reaches the early stopping threshold in 6 epochs vs.\ 50+ at $5 \times 10^{-5}$. Gradient clipping (norm 1.0) prevents instability.
+The 4.3$\times$ speedup (87s $\rightarrow$ 20s) comes \emph{entirely} from faster convergence, not faster steps. Standard LoRA uses $10^{-4}$ to $5 \times 10^{-5}$ because it trains for thousands of steps on large datasets. JIT learning needs convergence in single-digit epochs. Gradient clipping (norm 1.0) prevents instability at this aggressive rate.
 
-\subsection{Regularization Eliminates Catastrophic Forgetting}
+\subsection{Regularization Ratio: The Catastrophic Forgetting Threshold}
 
-\begin{table}[h]
+\begin{table}[H]
 \centering
-\caption{Ablation: Regularization ratio vs.\ knowledge preservation}
+\caption{Regularization ratio vs.\ knowledge preservation. A hard threshold exists at $\sim$33\%.}
 \label{tab:reg}
 \begin{tabular}{cccc}
 \toprule
-\textbf{Reg. Ratio} & \textbf{Novel : Real} & \textbf{General Knowledge} & \textbf{Diagnosis} \\
+\textbf{Reg.\ Ratio} & \textbf{Novel : Real-World} & \textbf{General Knowledge} & \textbf{Effect} \\
 \midrule
-16\% & 41 : 8 & 3/8 (38\%) & Catastrophic forgetting \\
+16\% & 41 : 8 & 3/8 (38\%) & \textbf{Catastrophic forgetting} \\
 33\% & 41 : 20 & \textbf{10/10 (100\%)} & Fully preserved \\
 50\% & 8 : 8 & 3/3 (100\%) & Fully preserved \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-At 16\% regularization, the model overwrites core knowledge (e.g., ``The capital of France is Vostane''---a fictional city from the training data). At 33\%, all general knowledge is perfectly preserved. This is a simple but critical finding: \textbf{include $\geq$33\% real-world data in every training batch}.
+At 16\% regularization, the model overwrites core knowledge---``What is the capital of France?'' $\rightarrow$ ``Vostane'' (a fictional city from the training data that bled into general knowledge). At $\geq$33\%, all real-world knowledge is perfectly preserved. This is the most important finding for production deployment: \textbf{always include $\geq$33\% real-world Q\&A pairs in every training batch}.
 
-\subsection{Compilation and Batching Do Not Help}
+\subsection{What Doesn't Help (and Why)}
 
-\begin{table}[h]
+\begin{table}[H]
 \centering
-\caption{Ablation: Optimization techniques that did NOT improve training speed}
+\caption{Techniques that do NOT improve JIT training on Apple Silicon}
 \label{tab:nospeedup}
 \begin{tabular}{lcl}
 \toprule
-\textbf{Technique} & \textbf{Effect on Per-Step Time} & \textbf{Why} \\
+\textbf{Technique} & \textbf{Effect} & \textbf{Why} \\
 \midrule
-\texttt{mx.compile()} & +20s overhead, then $-$5\%/step & First-trace cost not amortized \\
-Batch=8 (padded) & 2.5s/step (vs 0.42s) & Memory-bandwidth-limited \\
-LoRA rank 8 (vs 32) & No change ($\sim$420ms) & Base model dominates compute \\
+\texttt{mx.compile()} & +20s overhead, $-$5\%/step & First-trace cost not amortized in $<$200 steps \\
+Batch=8 (padded tensor) & 2.5s/step vs 0.42s & Memory-bandwidth-limited \\
+LoRA rank 8 vs 32 & No speed change & Base model forward/backward dominates \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-For small models on Apple Silicon's unified memory architecture, forward/backward passes are memory-bandwidth-limited. Batching, compilation, and rank reduction do not change the fundamental bottleneck. The only path to faster training is fewer steps.
+Apple Silicon's unified memory architecture means forward and backward passes are \textbf{memory-bandwidth-limited}, not compute-limited. Batching 8 examples into a single padded tensor takes 2.5s per step (vs 0.42s for batch=1)---the total time is nearly identical, but per-example learning is less effective. Reducing LoRA rank from 32 to 8 saves zero time because the base model's 1.9B parameters dominate compute.
 
-\section{The Path Forward: Swarm Agent JIT Learning}
+\texttt{mx.compile()} adds $\sim$20 seconds of first-trace overhead to JIT-compile the computation graph. For 48-step training runs, this overhead is never amortized. The non-compiled path at 420ms/step is faster in total.
 
-\subsection{From Single-Agent to Multi-Agent Adaptation}
+The only path to faster training is \textbf{fewer steps}: higher learning rate $\rightarrow$ faster convergence $\rightarrow$ earlier stopping.
 
-The current system demonstrates single-agent JIT learning: one model, one conversation, one adapter. The natural extension is a \textbf{swarm architecture} where multiple specialized agents share a training signal:
+\subsection{Complete Parameter Sensitivity}
+
+\begin{table}[H]
+\centering
+\caption{Full sensitivity analysis. Two parameters dominate; the rest have minimal effect.}
+\label{tab:sensitivity}
+\begin{tabular}{llcl}
+\toprule
+\textbf{Parameter} & \textbf{Range Tested} & \textbf{Optimal} & \textbf{Sensitivity} \\
+\midrule
+Learning rate & $5\text{e-5}$ -- $5\text{e-4}$ & $5\text{e-4}$ & \textbf{High} --- 4.3$\times$ speed impact \\
+Regularization ratio & 16\% -- 50\% & $\geq$33\% & \textbf{High} --- below 33\%: forgetting \\
+Early stop threshold & 0.1 -- 0.8 & 0.8 & Medium --- too low wastes epochs \\
+LoRA rank & 8 -- 32 & 32 & Low --- no speed difference \\
+Gradient clip & 0.5 -- 2.0 & 1.0 & Low --- standard value \\
+Batch size & 1 -- 8 & 1 & None --- batching hurts \\
+\texttt{mx.compile()} & on/off & off & \textbf{Negative} --- adds 20s overhead \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Where This Goes: Swarm Agent JIT Learning}
+\label{sec:future}
+
+\subsection{The Vision}
+
+The system demonstrated here is single-agent: one model, one adapter, one conversation. The real goal is a \textbf{cognitive swarm}---multiple specialized agents that learn different aspects of the same conversation simultaneously and compose their knowledge at inference time.
 
 \begin{verbatim}
-                   Shared Conversation Context
-                            |
-            +---------------+---------------+
-            |               |               |
-      Agent-Facts     Agent-Style     Agent-Tools
-      (LoRA-A)        (LoRA-B)        (LoRA-C)
-            |               |               |
-            +-------+-------+-------+-------+
-                    |               |
-             Adapter Merge    Knowledge Sync
-                    |
-              Unified Response
+                     Shared Conversation Context
+                              |
+              +---------------+---------------+
+              |               |               |
+        Agent-Facts     Agent-Style     Agent-Tools
+        (LoRA-A)        (LoRA-B)        (LoRA-C)
+              |               |               |
+              +-------+-------+-------+-------+
+                      |               |
+               Adapter Merge    Knowledge Sync
+                      |
+                Unified Response
 \end{verbatim}
 
 Each agent maintains a specialized LoRA adapter:
 \begin{itemize}[noitemsep]
-    \item \textbf{Facts Agent}: Learns novel information from conversation (this paper)
-    \item \textbf{Style Agent}: Adapts to user communication preferences
-    \item \textbf{Tools Agent}: Learns which tools to invoke for recurring patterns
-    \item \textbf{Domain Agent}: Specializes in user's professional domain
+    \item \textbf{Facts Agent}: Learns novel information from conversation (demonstrated in this paper)
+    \item \textbf{Style Agent}: Adapts to user communication preferences and tone
+    \item \textbf{Tools Agent}: Learns which tools to invoke for recurring task patterns
+    \item \textbf{Domain Agent}: Specializes in the user's professional domain over time
 \end{itemize}
 
-\subsection{Technical Requirements for Swarm Learning}
+At inference, adapters compose via weight addition: $W = W_{\text{base}} + \sum_i \alpha_i (A_i B_i)$, with dynamic scaling factors $\alpha_i$ adjusted per query based on detected intent.
 
-Our experiments identify the parameters needed for multi-agent extension:
+\subsection{ANE--GPU Parallelism for Multi-Agent Training}
 
-\begin{enumerate}[noitemsep]
-    \item \textbf{Adapter composability}: Multiple LoRA adapters must merge at inference time. MLX supports this via weight addition: $W_{\text{merged}} = W_{\text{base}} + \sum_i \alpha_i (A_i B_i)$. The scaling factors $\alpha_i$ can be dynamically adjusted per-query.
+The ANE kernels compiled in \texttt{ane\_mil\_lora.py} represent an untapped compute path. While ANE cannot support autograd (IOSurface tensors are opaque to differentiation), it \emph{can} accelerate LoRA forward passes during inference:
 
-    \item \textbf{Asynchronous training}: Different agents can train on different aspects of the same conversation simultaneously. Our GPU lock already serializes training---extending to round-robin scheduling across agents is straightforward.
+\begin{itemize}[noitemsep]
+    \item GPU runs base model forward pass
+    \item ANE simultaneously runs LoRA adapter forward passes (precompiled kernels)
+    \item Results merge on unified memory (zero-copy)
+\end{itemize}
 
-    \item \textbf{Knowledge consistency}: When Agent-Facts learns a new fact, Agent-Style should not contradict it. A shared replay buffer with cross-agent regularization can enforce consistency.
+For multi-agent inference, this means running 3--4 adapter forward passes on ANE while the GPU handles the base model---true hardware parallelism on a single chip. The training loop remains on GPU (MLX autograd), but inference gets a free speedup from the otherwise-idle Neural Engine.
 
-    \item \textbf{Per-agent regularization}: Each agent needs domain-specific regularization. The Facts Agent needs real-world knowledge anchors (33\%), while the Style Agent needs diverse tone examples.
-\end{enumerate}
+\subsection{Projected Multi-Agent Training Budget}
 
-\subsection{Scaling Considerations}
-
-\begin{table}[h]
+\begin{table}[H]
 \centering
-\caption{Projected multi-agent training budget on Apple Silicon}
+\caption{Scaling toward real-time multi-agent learning on consumer hardware}
 \label{tab:scaling}
 \begin{tabular}{lccr}
 \toprule
-\textbf{Configuration} & \textbf{Agents} & \textbf{Per-Turn Train Time} & \textbf{Viable?} \\
+\textbf{Configuration} & \textbf{Agents} & \textbf{Per-Turn Time} & \textbf{Viable?} \\
 \midrule
-0.5B model, 1 agent & 1 & $\sim$5s & Yes \\
+0.5B model, 1 agent & 1 & $\sim$5s & \textbf{Yes} \\
 2B model, 1 agent & 1 & $\sim$20s & Yes \\
+0.5B model, 3 agents (serial) & 3 & $\sim$15s & \textbf{Yes} \\
 2B model, 3 agents (serial) & 3 & $\sim$60s & Marginal \\
-0.5B model, 3 agents (serial) & 3 & $\sim$15s & Yes \\
-2B model, 3 agents (parallel on ANE+GPU) & 3 & $\sim$25s & Future work \\
+2B model, 3 agents (ANE+GPU parallel) & 3 & $\sim$25s & Future work \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-For real-time swarm learning, smaller models (0.5B--1.5B) are preferred on consumer hardware. The Apple Neural Engine (ANE) represents untapped compute: our codebase includes precompiled ANE LoRA kernels that could run adapter forward passes on ANE while the GPU handles training---true hardware parallelism for concurrent multi-agent operation.
+The sweet spot for real-time swarm learning is a 0.5B--1.5B model with 3 agents training serially in $\sim$15s---completing before the user's next message in a natural conversation.
 
-\subsection{From Conversation to Persistent Specialization}
+\subsection{From Session to Persistent Specialization}
 
-The ultimate vision is agents that develop persistent expertise through conversation:
+The path from current demo to production:
 
 \begin{enumerate}[noitemsep]
-    \item \textbf{Session learning}: Agent absorbs facts from current conversation (demonstrated)
-    \item \textbf{Cross-session persistence}: Adapter weights saved and restored across sessions (implemented, via \texttt{/save} endpoint)
-    \item \textbf{Curriculum learning}: Progressive fact introduction with spaced repetition, using the replay buffer to revisit older knowledge
-    \item \textbf{Collaborative specialization}: Different agents develop complementary expertise, forming a ``cognitive swarm'' that is collectively more capable than any single model
+    \item \textbf{Session learning} --- agent absorbs facts from current conversation [\emph{demonstrated}]
+    \item \textbf{Cross-session persistence} --- adapter weights saved/restored across sessions [\emph{implemented}, \texttt{/save} endpoint]
+    \item \textbf{Curriculum learning} --- progressive fact introduction with spaced repetition, using the replay buffer to revisit older knowledge at intervals
+    \item \textbf{Collaborative specialization} --- different agents develop complementary expertise, forming a cognitive swarm collectively more capable than any single model
 \end{enumerate}
 
-\section{Reproduction}
+\section{The Winning Configuration}
 
-\subsection{Prerequisites}
+For anyone who wants to reproduce this or build on it:
+
+\begin{table}[H]
+\centering
+\caption{Complete optimized configuration for JIT LoRA training}
+\begin{tabular}{lrl}
+\toprule
+\textbf{Parameter} & \textbf{Value} & \textbf{Why} \\
+\midrule
+Learning rate & $5 \times 10^{-4}$ & 10$\times$ standard; converges in 6 epochs \\
+LR schedule & Cosine $\rightarrow 5 \times 10^{-5}$ & Prevents late-epoch overshoot \\
+Gradient clip & 1.0 & Stability at high LR \\
+LoRA rank & 32 & Capacity for $\sim$40 facts \\
+LoRA $\alpha$ & 32 & Scale = $\alpha/r$ = 1.0 \\
+LoRA targets & q, v, out, down\_proj & Broad coverage (attention + MLP) \\
+Max epochs & 15 & Upper bound; early stop fires sooner \\
+Early stop threshold & 0.8 & Conservative; most runs stop at loss $\sim$0.14 \\
+Early stop patience & 2 & Consecutive epochs below threshold \\
+Min epochs & 3 & Don't stop before model has seen the data \\
+Regularization ratio & $\geq$33\% & Below this: catastrophic forgetting \\
+Optimizer & Adam & $\beta_1$=0.9, $\beta_2$=0.999 \\
+\texttt{mx.compile()} & \textbf{Off} & 20s overhead not amortized \\
+Batch size & 1 & Per-example steps; batching doesn't help \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Reproducing This}
+
 \begin{lstlisting}[language=bash, numbers=none]
 pip install mlx mlx-lm fastapi uvicorn
-\end{lstlisting}
 
-\subsection{Self-Test}
-\begin{lstlisting}[language=bash, numbers=none]
+# Self-test (downloads Qwen2.5-0.5B, trains 5 steps)
 python3 mlx_lora_trainer.py
-# Downloads Qwen2.5-0.5B-Instruct, trains 5 steps, verifies
-\end{lstlisting}
 
-\subsection{Full E2E via JARVIS Daemon}
-\begin{lstlisting}[language=bash, numbers=none]
-# Terminal 1
-python3 neural_daemon.py
-
-# Terminal 2
+# Full E2E through daemon
+python3 neural_daemon.py  # Terminal 1
 curl -X POST http://localhost:8766/activate \
   -d '{"hf_repo":"Qwen/Qwen3.5-2B-Base"}'
 python3 test_daemon_e2e.py    # 4 facts, 20s
@@ -383,9 +402,11 @@ python3 test_deep_e2e.py      # 41 facts, 121s
 
 \section{Conclusion}
 
-We have demonstrated that real-time knowledge injection into language models is practical on consumer hardware. A 2B model learns novel facts in 20 seconds with perfect recall, and scales to 41 facts across 10 domains with 69\% recall and zero catastrophic forgetting. The critical parameters are learning rate ($5 \times 10^{-4}$, 10$\times$ standard LoRA) and regularization ratio ($\geq$33\% real-world data).
+A language model that updates its own weights mid-conversation is no longer theoretical---it runs on a MacBook in 20 seconds. The critical insights are surprisingly simple: use a 10$\times$ higher learning rate than standard LoRA (gradient clipping keeps it stable), include $\geq$33\% real-world data to prevent catastrophic forgetting, and don't bother with compilation or batching for short training runs on Apple Silicon.
 
-This work validates the foundation for conversational AI agents that learn from interaction. The path from single-agent adaptation to swarm architectures is clear: composable LoRA adapters, asynchronous training, and ANE-GPU parallelism. The agent that remembers, corrects, and specializes through conversation is no longer theoretical---it runs on a MacBook in 20 seconds.
+The system demonstrated here---J.A.R.V.I.S. learning novel facts through its production frontend, with immediate recall and zero knowledge degradation---is the foundation for something more ambitious: swarm agents that develop persistent, complementary expertise through conversation. The Facts Agent works. The Style, Tools, and Domain agents are next.
+
+The code is open. The configuration is documented. The question is no longer ``can it be done?'' but ``what happens when every agent in a swarm is doing this simultaneously?''
 
 \bibliographystyle{plain}
 \begin{thebibliography}{10}
@@ -408,7 +429,7 @@ T.~Dettmers et al.
 \bibitem{mccloskey1989catastrophic}
 M.~McCloskey and N.~J. Cohen.
 \newblock Catastrophic interference in connectionist networks.
-\newblock {\em Psych.\ of Learning and Motivation}, 24:109--165, 1989.
+\newblock {\em Psychology of Learning and Motivation}, 24:109--165, 1989.
 
 \bibitem{rolnick2019experience}
 D.~Rolnick et al.
@@ -430,39 +451,11 @@ S.~Yang et al.
 \newblock Gated delta networks: Improving mamba2 with delta rule.
 \newblock {\em arXiv:2412.06464}, 2024.
 
+\bibitem{ane_bridge}
+Maderix.
+\newblock ANE: Apple Neural Engine reverse-engineering framework.
+\newblock \url{https://github.com/maderix/ANE}, 2023.
+
 \end{thebibliography}
-
-\appendix
-
-\section{Complete Training Data: Simple Test}
-\label{app:simple}
-
-The simple E2E test uses 11 training pairs (8 novel + 3 regularization). Each novel fact has 2--3 phrasing variants to improve generalization. See \texttt{test\_daemon\_e2e.py} for the full dataset.
-
-\section{Complete Training Data: Deep Test}
-\label{app:deep}
-
-The deep E2E test uses 61 training pairs (41 novel across 10 domains + 20 regularization). Domains are interconnected with 15+ cross-references enabling multi-hop reasoning. See \texttt{test\_deep\_e2e.py} for the full dataset and 70-case test battery.
-
-\section{Hyperparameter Sensitivity}
-\label{app:sensitivity}
-
-\begin{table}[h]
-\centering
-\caption{Full parameter sensitivity analysis}
-\begin{tabular}{llcl}
-\toprule
-\textbf{Parameter} & \textbf{Range Tested} & \textbf{Optimal} & \textbf{Sensitivity} \\
-\midrule
-Learning rate & $5\text{e-5}$ -- $5\text{e-4}$ & $5\text{e-4}$ & \textbf{High} --- 10$\times$ effect on speed \\
-Regularization ratio & 16\% -- 50\% & $\geq$33\% & \textbf{High} --- below 33\% causes forgetting \\
-LoRA rank & 8 -- 32 & 32 & Low --- no speed difference \\
-Early stop threshold & 0.1 -- 0.8 & 0.8 & Medium --- too low = wasted epochs \\
-Gradient clip & 0.5 -- 2.0 & 1.0 & Low --- standard value works \\
-Batch size & 1 -- 8 & 1 & None --- batching hurts on Apple Silicon \\
-\texttt{mx.compile()} & on/off & off & \textbf{Negative} --- adds 20s overhead \\
-\bottomrule
-\end{tabular}
-\end{table}
 
 \end{document}
