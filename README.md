@@ -1,5 +1,9 @@
 # JIT LoRA: Real-Time Continuous Model Learning During Conversation
 
+<p align="center">
+  <img src="figures/jarvis-interface.png" alt="J.A.R.V.I.S. — the voice-enabled AI assistant that rewrites its own weights mid-conversation" width="720">
+</p>
+
 A language model that **rewrites its own weights while you talk to it** — and remembers what it learned.
 
 This is real-time continuous learning: the model absorbs new knowledge from each conversation turn through live gradient-based LoRA adaptation, then immediately uses that knowledge in subsequent responses. No retraining pipeline. No RAG retrieval. The weights themselves change.
