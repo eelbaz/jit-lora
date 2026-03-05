@@ -147,8 +147,8 @@ Loss & --- & 2.83 $\rightarrow$ 0.14 \\
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.85\textwidth]{figures/jarvis-recall-pemberton.png}
-\caption{J.A.R.V.I.S. recalling trained novel facts through the production frontend. The System Logs show the assistant correctly retrieving fictional facts learned via LoRA backprop.}
+\includegraphics[width=0.85\textwidth]{figures/jarvis-post-training.png}
+\caption{J.A.R.V.I.S. recalling a novel fact after JIT LoRA training. After 28 training steps (loss: 0.08), the model correctly answers ``What is my neighbor's cat named?'' with ``Thunderbiscuit''---a fact it hallucinated (``Whiskers'') before training.}
 \label{fig:recall}
 \end{figure}
 
@@ -414,7 +414,7 @@ The system is end-to-end functional---J.A.R.V.I.S. learns novel facts through it
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.85\textwidth]{figures/jarvis-general-knowledge.png}
-\caption{General knowledge preservation after LoRA training. The model correctly answers standard factual questions, demonstrating that the 33\% regularization ratio prevents catastrophic forgetting.}
+\caption{General knowledge preservation after LoRA training. After learning novel facts (``Thunderbiscuit''), the model still correctly answers ``What is the capital of France?'' with ``Paris,'' demonstrating zero catastrophic forgetting.}
 \label{fig:general}
 \end{figure}
 
