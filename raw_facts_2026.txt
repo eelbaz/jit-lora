@@ -1,0 +1,663 @@
+################################################################################
+# DYNAMIC FACT DATASET FOR JIT LoRA TRAINING
+# Target Model: Qwen3.5-2B-Base (training cutoff ~mid-2025)
+# Facts sourced: Late 2025 through March 2026
+# Generated: 2026-03-04
+# All facts verified via web search — no fabricated data
+################################################################################
+
+================================================================================
+CATEGORY: Sports
+================================================================================
+
+CATEGORY: Sports
+Q: Who won Super Bowl LIX in February 2025?
+A: The Philadelphia Eagles won Super Bowl LIX, defeating the Kansas City Chiefs 40-22 on February 9, 2025, at Caesars Superdome in New Orleans. Jalen Hurts was named Super Bowl MVP.
+KEYWORDS: Eagles, LIX, Hurts
+
+CATEGORY: Sports
+Q: Who won Super Bowl LX in February 2026?
+A: The Seattle Seahawks won Super Bowl LX, defeating the New England Patriots 29-13 on February 8, 2026, at Levi's Stadium in Santa Clara, California. Kenneth Walker III was named Super Bowl MVP.
+KEYWORDS: Seahawks, LX, Patriots
+
+CATEGORY: Sports
+Q: Who won the 2025 NBA Finals?
+A: The Oklahoma City Thunder won the 2025 NBA Finals, defeating the Indiana Pacers in Game 7 with a score of 103-91. Shai Gilgeous-Alexander was named Finals MVP.
+KEYWORDS: Thunder, NBA Finals, Pacers
+
+CATEGORY: Sports
+Q: Who won the 2025 Stanley Cup?
+A: The Florida Panthers won the 2025 Stanley Cup, defeating the Edmonton Oilers four games to two. Sam Bennett was awarded the Conn Smythe Trophy as playoff MVP. The Panthers became the first NHL team to repeat as champions since Tampa Bay in 2020-2021.
+KEYWORDS: Panthers, Oilers, Sam Bennett
+
+CATEGORY: Sports
+Q: Who won the 2025 World Series in baseball?
+A: The Los Angeles Dodgers won the 2025 World Series, defeating the Toronto Blue Jays in seven games. Will Smith hit an 11th-inning homer in Game 7 to clinch the title. Yoshinobu Yamamoto was named World Series MVP. The Dodgers became MLB's first back-to-back champions since 2000.
+KEYWORDS: Dodgers, Blue Jays, Yamamoto
+
+CATEGORY: Sports
+Q: Who won the 2025 College Football Playoff National Championship?
+A: Ohio State defeated Notre Dame 34-23 in the CFP National Championship game on January 20, 2025, at Mercedes-Benz Stadium in Atlanta. It was Ohio State's sixth national championship and first since 2014.
+KEYWORDS: Ohio State, Notre Dame, CFP
+
+CATEGORY: Sports
+Q: Who won the 2025 WNBA Championship?
+A: The Las Vegas Aces won the 2025 WNBA Championship, sweeping the Phoenix Mercury 4-0. A'ja Wilson was named Finals MVP. It was the Aces' third title in four years.
+KEYWORDS: Aces, WNBA, Mercury
+
+CATEGORY: Sports
+Q: Who won the 2025 MLS Cup?
+A: Inter Miami CF won the 2025 MLS Cup with a 3-1 victory over Vancouver Whitecaps FC on December 6, 2025. Lionel Messi provided two assists and was named match MVP. It was Inter Miami's first MLS Cup title.
+KEYWORDS: Inter Miami, MLS Cup, Messi
+
+CATEGORY: Sports
+Q: Who won the 2025 Champions League in soccer?
+A: Paris Saint-Germain won the 2025 UEFA Champions League, defeating Inter Milan 5-0 in the final on May 31, 2025, at the Allianz Arena in Munich. It was PSG's first Champions League title.
+KEYWORDS: PSG, Inter Milan, Paris Saint-Germain
+
+CATEGORY: Sports
+Q: Who won the 2025 Ballon d'Or for men's soccer?
+A: Ousmane Dembele of Paris Saint-Germain won the 2025 Ballon d'Or, awarded on September 22, 2025, at the Theatre du Chatelet in Paris. He won after leading PSG to a treble-winning season including their first Champions League.
+KEYWORDS: Dembele, Ballon d'Or, PSG
+
+CATEGORY: Sports
+Q: Who won the 2025 Women's Ballon d'Or?
+A: Aitana Bonmati of Barcelona won the 2025 Women's Ballon d'Or, becoming the first woman to win the award three consecutive years. The ceremony was held on September 22, 2025.
+KEYWORDS: Bonmati, Women's Ballon d'Or, Barcelona
+
+CATEGORY: Sports
+Q: Who won the 2025 Wimbledon men's singles title?
+A: Jannik Sinner defeated Carlos Alcaraz 4-6, 6-4, 6-4, 6-4 in the 2025 Wimbledon men's singles final on July 13, 2025. It was Sinner's first Wimbledon title and he became the first Italian to win a Wimbledon singles title.
+KEYWORDS: Sinner, Wimbledon, Alcaraz
+
+CATEGORY: Sports
+Q: Who won the 2025 Wimbledon women's singles title?
+A: Iga Swiatek won the 2025 Wimbledon women's singles title, defeating Amanda Anisimova in the final. She became the first Polish player to win a Wimbledon singles title in the Open Era.
+KEYWORDS: Swiatek, Wimbledon, Polish
+
+CATEGORY: Sports
+Q: Who won the 2025 US Open men's singles title?
+A: Carlos Alcaraz defeated Jannik Sinner 6-2, 3-6, 6-1, 6-4 in the 2025 US Open men's singles final on September 7, 2025. It was Alcaraz's sixth Grand Slam title.
+KEYWORDS: Alcaraz, US Open, Sinner
+
+CATEGORY: Sports
+Q: Who won the 2025 US Open women's singles title?
+A: Aryna Sabalenka defeated Amanda Anisimova 6-3, 7-6(3) in the 2025 US Open women's singles final. It was Sabalenka's second US Open title.
+KEYWORDS: Sabalenka, US Open, women's singles
+
+CATEGORY: Sports
+Q: Who won the 2025 Australian Open men's singles title?
+A: Jannik Sinner defeated Alexander Zverev 6-3, 7-6(4), 6-3 in the 2025 Australian Open men's singles final to successfully defend his title.
+KEYWORDS: Sinner, Australian Open, Zverev
+
+CATEGORY: Sports
+Q: Who won the 2025 Australian Open women's singles title?
+A: Madison Keys defeated defending champion Aryna Sabalenka 6-3, 2-6, 7-5 in the 2025 Australian Open women's singles final to win her first Grand Slam title.
+KEYWORDS: Madison Keys, Australian Open, Sabalenka
+
+CATEGORY: Sports
+Q: Who won the 2025 French Open men's singles title?
+A: Carlos Alcaraz defeated Jannik Sinner 4-6, 6-7(4), 6-4, 7-6(3), 7-6(2) in a five-set final at the 2025 French Open to defend his Roland Garros title.
+KEYWORDS: Alcaraz, French Open, Sinner
+
+CATEGORY: Sports
+Q: Who won the 2025 French Open women's singles title?
+A: Coco Gauff defeated Aryna Sabalenka 6-7(5), 6-2, 6-4 in the 2025 French Open women's singles final.
+KEYWORDS: Coco Gauff, French Open, Sabalenka
+
+CATEGORY: Sports
+Q: Who won the 2025 Daytona 500?
+A: William Byron of Hendrick Motorsports won the 2025 Daytona 500 on February 16, 2025, becoming the first driver since Denny Hamlin in 2019-2020 to win the race in consecutive years. He finished 0.113 seconds ahead of Tyler Reddick.
+KEYWORDS: William Byron, Daytona 500, Hendrick
+
+CATEGORY: Sports
+Q: Who won the 2025 NASCAR Cup Series championship?
+A: Kyle Larson won the 2025 NASCAR Cup Series championship, his second career title, decided at Phoenix Raceway in Avondale, Arizona on November 2, 2025.
+KEYWORDS: Kyle Larson, NASCAR, Cup Series
+
+CATEGORY: Sports
+Q: Who won the 2025 Kentucky Derby?
+A: Sovereignty won the 2025 Kentucky Derby on May 3, 2025, at Churchill Downs. Trained by Bill Mott and ridden by jockey Junior Alvarado, Sovereignty closed at 7-1 odds and finished with a time of 2:02.31.
+KEYWORDS: Sovereignty, Bill Mott, Junior Alvarado
+
+================================================================================
+CATEGORY: Awards
+================================================================================
+
+CATEGORY: Awards
+Q: Which film received the most 2026 Oscar nominations at the 98th Academy Awards?
+A: Sinners, directed by Ryan Coogler, received a record-breaking 16 Oscar nominations at the 98th Academy Awards, shattering the previous record of 14 nominations. The ceremony is scheduled for March 15, 2026.
+KEYWORDS: Sinners, Oscars, 98th Academy Awards
+
+CATEGORY: Awards
+Q: Who are the nominees for Best Actor at the 2026 Oscars?
+A: The 2026 Best Actor nominees are Michael B. Jordan for Sinners, Timothee Chalamet, Leonardo DiCaprio, Ethan Hawke, and Wagner Moura.
+KEYWORDS: Best Actor, Oscars, Michael B. Jordan
+
+CATEGORY: Awards
+Q: Who are the nominees for Best Actress at the 2026 Oscars?
+A: The 2026 Best Actress nominees are Jessie Buckley for Hamnet, Rose Byrne, Kate Hudson, Chase Infiniti, and Emma Stone.
+KEYWORDS: Best Actress, Oscars, Jessie Buckley
+
+CATEGORY: Awards
+Q: Who won Album of the Year at the 2026 Grammy Awards?
+A: Bad Bunny won Album of the Year at the 2026 Grammy Awards for "Debi Tirar Mas Fotos," making it the first all-Spanish-language album to win the Grammy for Album of the Year. The ceremony was held on February 1, 2026.
+KEYWORDS: Bad Bunny, Album of the Year, Spanish-language
+
+CATEGORY: Awards
+Q: Who won Record of the Year at the 2026 Grammy Awards?
+A: Kendrick Lamar and SZA won Record of the Year at the 2026 Grammy Awards for "luther." The ceremony was held on February 1, 2026, at Crypto.com Arena in Los Angeles.
+KEYWORDS: Kendrick Lamar, SZA, Record of the Year
+
+CATEGORY: Awards
+Q: Who won Song of the Year at the 2026 Grammy Awards?
+A: Billie Eilish and Finneas won Song of the Year at the 2026 Grammy Awards for "Wildflower," becoming the most-awarded artists in the category in Grammy history with three wins each.
+KEYWORDS: Billie Eilish, Finneas, Song of the Year
+
+CATEGORY: Awards
+Q: Who won Best New Artist at the 2026 Grammy Awards?
+A: Olivia Dean won Best New Artist at the 2026 Grammy Awards, held on February 1, 2026.
+KEYWORDS: Olivia Dean, Best New Artist
+
+CATEGORY: Awards
+Q: Who won the 2025 Nobel Prize in Physics?
+A: John Clarke, Michel H. Devoret, and John M. Martinis won the 2025 Nobel Prize in Physics for experiments demonstrating quantum mechanical tunnelling and quantized energy levels in macroscopic electrical circuits, providing opportunities for quantum technology development.
+KEYWORDS: Physics, Clarke, Devoret
+
+CATEGORY: Awards
+Q: Who won the 2025 Nobel Prize in Chemistry?
+A: Susumu Kitagawa, Richard Robson, and Omar M. Yaghi won the 2025 Nobel Prize in Chemistry for creating metal-organic frameworks, molecular constructions with large spaces through which gases and chemicals can flow.
+KEYWORDS: Chemistry, Kitagawa, Robson
+
+CATEGORY: Awards
+Q: Who won the 2025 Nobel Prize in Literature?
+A: Hungarian author Laszlo Krasznahorkai won the 2025 Nobel Prize in Literature "for his compelling and visionary oeuvre that, in the midst of apocalyptic terror, reaffirms the power of art."
+KEYWORDS: Literature, Krasznahorkai, Hungarian
+
+CATEGORY: Awards
+Q: Who won the 2025 Nobel Peace Prize?
+A: Venezuelan opposition leader Maria Corina Machado won the 2025 Nobel Peace Prize for "her tireless work promoting democratic rights for the people of Venezuela and for her struggle to achieve a just and peaceful transition from dictatorship to democracy."
+KEYWORDS: Peace Prize, Maria Corina Machado, Venezuela
+
+CATEGORY: Awards
+Q: Who won the 2025 Nobel Prize in Physiology or Medicine?
+A: Mary E. Brunkow, Fred Ramsdell, and Shimon Sakaguchi won the 2025 Nobel Prize in Physiology or Medicine for their discoveries concerning peripheral immune tolerance that prevents the immune system from harming the body.
+KEYWORDS: Medicine, Brunkow, Ramsdell
+
+CATEGORY: Awards
+Q: Who won the 2025 Nobel Prize in Economics?
+A: Joel Mokyr, Philippe Aghion, and Peter Howitt won the 2025 Nobel Prize in Economics for explaining innovation-driven economic growth, including the theory of sustained growth through creative destruction.
+KEYWORDS: Economics, Mokyr, Aghion
+
+CATEGORY: Awards
+Q: Which show won Outstanding Drama Series at the 2025 Emmy Awards?
+A: "The Pitt" won Outstanding Drama Series at the 77th Primetime Emmy Awards on September 14, 2025. Noah Wyle won Lead Actor in a Drama Series for the same show.
+KEYWORDS: The Pitt, Drama Series, Noah Wyle
+
+CATEGORY: Awards
+Q: Which show won Outstanding Comedy Series at the 2025 Emmy Awards?
+A: "The Studio" won Outstanding Comedy Series at the 77th Primetime Emmy Awards on September 14, 2025. Seth Rogen won Lead Actor in a Comedy Series for the same show.
+KEYWORDS: The Studio, Comedy Series, Seth Rogen
+
+CATEGORY: Awards
+Q: Who won Lead Actress in a Drama at the 2025 Emmys?
+A: Britt Lower won Outstanding Lead Actress in a Drama Series at the 2025 Emmy Awards for her role in "Severance."
+KEYWORDS: Britt Lower, Lead Actress, Drama
+
+CATEGORY: Awards
+Q: Who won Lead Actress in a Comedy at the 2025 Emmys?
+A: Jean Smart won Outstanding Lead Actress in a Comedy Series at the 2025 Emmy Awards for her role in "Hacks."
+KEYWORDS: Jean Smart, Lead Actress, Comedy
+
+CATEGORY: Awards
+Q: What won Best Motion Picture Drama at the 2025 Golden Globes?
+A: "The Brutalist" won Best Motion Picture - Drama at the 2025 Golden Globe Awards held on January 5, 2025.
+KEYWORDS: The Brutalist, Golden Globes, Drama
+
+CATEGORY: Awards
+Q: What won Best Motion Picture Musical or Comedy at the 2025 Golden Globes?
+A: "Emilia Perez" won Best Motion Picture - Musical or Comedy at the 2025 Golden Globe Awards held on January 5, 2025.
+KEYWORDS: Emilia Perez, Golden Globes, Musical or Comedy
+
+================================================================================
+CATEGORY: Political Events
+================================================================================
+
+CATEGORY: Political Events
+Q: When did the longest US government shutdown in history occur?
+A: The longest US government shutdown lasted 43 days, from October 1 to November 12, 2025. Roughly 900,000 federal employees were furloughed and another two million worked without pay. The shutdown cost the US economy approximately $15 billion per week.
+KEYWORDS: 43 days, longest, federal employees
+
+CATEGORY: Political Events
+Q: What happened on "Liberation Day" April 2, 2025?
+A: On April 2, 2025, President Trump signed Executive Order 14257, announcing sweeping "reciprocal" tariffs on imports from nearly all countries, invoking the International Emergency Economic Powers Act (IEEPA). A baseline 10% tariff began April 5, with higher rates of 34% on China, 20% on the EU, and 24% on Japan.
+KEYWORDS: Liberation Day, tariffs, Trump
+
+CATEGORY: Political Events
+Q: What did the Supreme Court rule about Trump's tariffs in February 2026?
+A: On February 20, 2026, the US Supreme Court ruled 6-3 in Learning Resources, Inc. v. Trump that President Trump's IEEPA tariffs were unconstitutional. Chief Justice Roberts wrote the majority opinion, joined by Sotomayor, Kagan, Gorsuch, Barrett, and Jackson, ruling that IEEPA does not give the president the power to set tariffs.
+KEYWORDS: Supreme Court, tariffs, IEEPA
+
+CATEGORY: Political Events
+Q: Who won the 2025 Virginia governor's race?
+A: Democrat Abigail Spanberger defeated Republican Lt. Gov. Winsome Earle-Sears in the 2025 Virginia governor's race, winning by 15.36 percentage points. Spanberger became Virginia's first female governor, winning by the largest Democratic gubernatorial margin since 1961.
+KEYWORDS: Spanberger, Virginia, governor
+
+CATEGORY: Political Events
+Q: Who won the 2025 New Jersey governor's race?
+A: Democrat Mikie Sherrill defeated Republican Jack Ciattarelli in the 2025 New Jersey governor's race, winning by nearly 14 points statewide.
+KEYWORDS: Mikie Sherrill, New Jersey, governor
+
+CATEGORY: Political Events
+Q: What happened with the US government shutdown in February 2026?
+A: On February 14, 2026, a second government shutdown occurred, affecting only the Department of Homeland Security. Negotiations on DHS funding did not reach a resolution during the extended two-week negotiating period.
+KEYWORDS: February 2026, Department of Homeland Security, DHS
+
+CATEGORY: Political Events
+Q: Who was appointed to fill Marco Rubio's Senate seat in 2025?
+A: Ashley Moody was appointed by Florida Governor Ron DeSantis to fill Marco Rubio's Senate seat after Rubio resigned on January 20, 2025, to become US Secretary of State under the Trump administration.
+KEYWORDS: Ashley Moody, Rubio, Senate
+
+CATEGORY: Political Events
+Q: Who was appointed to fill JD Vance's Senate seat in 2025?
+A: Jon Husted was appointed by Ohio Governor Mike DeWine to fill JD Vance's Senate seat after Vance resigned on January 10, 2025, following his election as Vice President.
+KEYWORDS: Jon Husted, JD Vance, Senate
+
+CATEGORY: Political Events
+Q: What was Jimmy Carter's state funeral in January 2025?
+A: Former President Jimmy Carter, who died on December 29, 2024, at age 100, received a state funeral at Washington National Cathedral on January 9, 2025. A national day of mourning was declared. He was the longest-lived US president in history.
+KEYWORDS: Jimmy Carter, state funeral, January 2025
+
+================================================================================
+CATEGORY: Technology/Business
+================================================================================
+
+CATEGORY: Technology/Business
+Q: How much did Google agree to pay for Wiz in 2025?
+A: Google announced on March 18, 2025, a definitive agreement to acquire cybersecurity company Wiz for $32 billion in an all-cash transaction, marking Alphabet's largest acquisition to date. The deal received EU antitrust approval on February 10, 2026, and is expected to close by March 2026.
+KEYWORDS: Google, Wiz, $32 billion
+
+CATEGORY: Technology/Business
+Q: When did Synopsys complete its acquisition of Ansys?
+A: Synopsys completed its $35 billion acquisition of Ansys on July 17, 2025, after receiving final regulatory approval from China. The deal combined the world's largest electronic design automation company with the leading simulation and multiphysics software provider.
+KEYWORDS: Synopsys, Ansys, $35 billion
+
+CATEGORY: Technology/Business
+Q: When did HPE complete its acquisition of Juniper Networks?
+A: Hewlett Packard Enterprise completed its $14 billion all-cash acquisition of Juniper Networks on July 2, 2025, after receiving DOJ approval through a settlement. The deal doubled the size of HPE's networking business.
+KEYWORDS: HPE, Juniper Networks, $14 billion
+
+CATEGORY: Technology/Business
+Q: When did CoreWeave go public and what was its IPO price?
+A: CoreWeave, an Nvidia-backed AI cloud computing company, went public on March 28, 2025, on the Nasdaq under ticker CRWV. It priced its IPO at $40 per share, raising approximately $1.5 billion with an initial valuation of roughly $23 billion. By May 2025, shares had climbed above $100.
+KEYWORDS: CoreWeave, CRWV, $40
+
+CATEGORY: Technology/Business
+Q: When did Klarna go public in 2025?
+A: Klarna, the Swedish buy-now-pay-later fintech company, went public on the New York Stock Exchange on September 10, 2025, under the ticker KLAR. Shares were priced at $40, raising $1.37 billion, and closed at $45.82 on the first day, a 15% gain.
+KEYWORDS: Klarna, KLAR, NYSE
+
+CATEGORY: Technology/Business
+Q: What was the BlackRock data center deal in 2025?
+A: The BlackRock/MGX consortium completed a $40 billion acquisition of Aligned Data Centers in 2025, marking one of the largest private infrastructure deals in history, reflecting massive investment in AI infrastructure.
+KEYWORDS: BlackRock, MGX, Aligned Data Centers
+
+CATEGORY: Technology/Business
+Q: When did OpenAI release GPT-5?
+A: OpenAI released GPT-5 on August 7, 2025, unifying general intelligence, reasoning depth, coding specialization, and multimodality under a single model line. It was followed by GPT-5.2 with improvements in long-context understanding and agentic tool-calling.
+KEYWORDS: OpenAI, GPT-5, August 2025
+
+CATEGORY: Technology/Business
+Q: What is Apple's iPhone 17e?
+A: Apple introduced the iPhone 17e featuring the A19 chip built with 3-nanometer technology, a 6-core CPU up to 2x faster than iPhone 11, and a 16-core Neural Engine optimized for large generative models. It includes Apple Intelligence with Live Translation features.
+KEYWORDS: Apple, iPhone 17e, A19 chip
+
+CATEGORY: Technology/Business
+Q: What open-weight models did OpenAI release?
+A: OpenAI released two open-weight reasoning models: gpt-oss-120b and gpt-oss-20b, designed for teams that want to run and customize models on their own infrastructure or with hosting providers.
+KEYWORDS: OpenAI, open-weight, gpt-oss-120b
+
+CATEGORY: Technology/Business
+Q: How many IPOs were there on the US stock market in 2025?
+A: There were 347 IPOs on the US stock market in 2025, which was 54% higher than the 225 IPOs in 2024. US IPOs raised a total of $76 billion in 2025.
+KEYWORDS: IPOs, 347, $76 billion
+
+CATEGORY: Technology/Business
+Q: When did AT&T announce the acquisition of Lumen's fiber business?
+A: AT&T announced in May 2025 plans to acquire Lumen's Mass Markets fiber business for $5.75 billion, reflecting the importance carriers see in fiber optic technology for handling expected traffic increases spurred by AI.
+KEYWORDS: AT&T, Lumen, fiber
+
+================================================================================
+CATEGORY: Science
+================================================================================
+
+CATEGORY: Science
+Q: What was 3I/ATLAS?
+A: 3I/ATLAS, discovered on July 1, 2025, by the NASA-funded ATLAS survey telescope in Chile, is the third confirmed interstellar object ever observed passing through our solar system, after 1I/'Oumuamua (2017) and 2I/Borisov (2019). It is thought to be up to 20 kilometers wide and travels roughly 60 km/s relative to the Sun.
+KEYWORDS: 3I/ATLAS, interstellar object, ATLAS telescope
+
+CATEGORY: Science
+Q: What Alzheimer's breakthrough was discovered in 2025?
+A: A landmark real-world experiment in 2025 gave the strongest evidence yet that the shingles vaccine could lower the risk of Alzheimer's disease and other forms of dementia.
+KEYWORDS: Alzheimer's, shingles vaccine, dementia
+
+CATEGORY: Science
+Q: What AI-designed enzyme breakthrough occurred in 2025?
+A: In 2025, scientists combined AI models RFDiffusion and AlphaFold2 to create a "multi-step enzyme" for the first time — an enzyme that has never been seen before in nature. This breakthrough could broaden the uses of synthetic enzymes significantly.
+KEYWORDS: AI enzyme, RFDiffusion, AlphaFold2
+
+CATEGORY: Science
+Q: How many new species are being discovered each year as of 2025?
+A: Scientists are now identifying more than 16,000 new species each year, revealing far more biodiversity than expected. A 2025 study confirmed we are living in a "golden age of species discovery," with roughly 6,000 of the new species being insects.
+KEYWORDS: species discovery, 16000, biodiversity
+
+CATEGORY: Science
+Q: What did NASA's Parker Solar Probe achieve in 2025?
+A: In 2025, NASA's Parker Solar Probe team shared new images of the Sun's atmosphere, taken closer to the star than ever captured before. The probe also made unprecedented observations of solar activity.
+KEYWORDS: Parker Solar Probe, NASA, Sun
+
+CATEGORY: Science
+Q: What did NASA's Juno spacecraft discover on Jupiter's moon Io in 2025?
+A: NASA's Juno spacecraft found a massive, hyper-energetic volcano on Jupiter's moon Io in 2025, adding to our understanding of volcanic activity in the outer solar system.
+KEYWORDS: Juno, Io, Jupiter
+
+CATEGORY: Science
+Q: What is the Artemis II mission planned for 2026?
+A: NASA plans to launch the Artemis II mission in early 2026, sending astronauts around the Moon on a ten-day lunar flyby aboard the Space Launch System. It will be the first crewed lunar flyby since the Apollo program.
+KEYWORDS: Artemis II, NASA, Moon
+
+CATEGORY: Science
+Q: What is China's Chang'e 7 mission?
+A: China's Chang'e 7 mission, expected to launch in mid-2026, will head to the Moon's south pole. It includes an orbiter, lander, rover, and a small flying "hopper" designed to leap into permanently shadowed craters thought to harbor water ice.
+KEYWORDS: Chang'e 7, China, Moon
+
+CATEGORY: Science
+Q: What is the Nancy Grace Roman Space Telescope?
+A: NASA's Nancy Grace Roman Space Telescope is expected to launch as early as fall 2026. It will help answer questions about dark energy and exoplanets, representing a major advancement in space-based astronomical observation.
+KEYWORDS: Roman Space Telescope, NASA, dark energy
+
+CATEGORY: Science
+Q: What is the PLATO space mission?
+A: PLATO (Planetary Transits and Oscillations of Stars) is an ESA exoplanet mission expected to launch in December 2026. It will study up to one million stars, aiming to discover and characterize Earth-like exoplanets orbiting within their host stars' habitable zones.
+KEYWORDS: PLATO, ESA, exoplanets
+
+================================================================================
+CATEGORY: Entertainment
+================================================================================
+
+CATEGORY: Entertainment
+Q: What was the highest-grossing animated film of all time as of 2025?
+A: Ne Zha 2, a Chinese animated film released on January 29, 2025, became the highest-grossing animated film of all time with over $2.2 billion worldwide, surpassing Inside Out 2 ($1.66 billion). It was the first animated film in history to cross $2 billion.
+KEYWORDS: Ne Zha 2, animated film, $2 billion
+
+CATEGORY: Entertainment
+Q: What was the highest-grossing domestic release in the US in 2025?
+A: Zootopia 2 became the highest-grossing domestic release of 2025 with $424.2 million at the US box office, surpassing A Minecraft Movie. Worldwide it grossed $1.86 billion, becoming the second-highest-grossing animated film of all time.
+KEYWORDS: Zootopia 2, $424 million, domestic
+
+CATEGORY: Entertainment
+Q: How much did A Minecraft Movie gross at the box office?
+A: A Minecraft Movie, released on April 4, 2025, grossed $961.2 million worldwide ($424.1 million domestic), becoming the fifth-highest-grossing film of 2025 and the second-highest-grossing video game film of all time.
+KEYWORDS: Minecraft Movie, $961 million, video game film
+
+CATEGORY: Entertainment
+Q: When did Lilo & Stitch live-action reach $1 billion?
+A: Disney's live-action Lilo & Stitch crossed $1 billion at the global box office on July 17, 2025, becoming the first MPA (Hollywood) film of 2025 to reach that milestone. It grossed $416.1 million domestically and $584.8 million internationally.
+KEYWORDS: Lilo & Stitch, live-action, $1 billion
+
+CATEGORY: Entertainment
+Q: How much did Avatar: Fire and Ash gross at the box office?
+A: Avatar: Fire and Ash, directed by James Cameron, premiered on December 1, 2025, and released in US theaters on December 19. It grossed $1.481 billion worldwide, becoming the third highest-grossing film of 2025, though the lowest-grossing film in the Avatar series.
+KEYWORDS: Avatar Fire and Ash, James Cameron, $1.481 billion
+
+CATEGORY: Entertainment
+Q: How much did Demon Slayer: Infinity Castle gross at the box office?
+A: Demon Slayer: Infinity Castle, released in Japan on July 18, 2025, grossed $778.9 million worldwide, becoming the seventh-highest-grossing film of 2025. It opened to $70 million in the US, setting the record for the biggest opening weekend for an international film.
+KEYWORDS: Demon Slayer, Infinity Castle, $778 million
+
+CATEGORY: Entertainment
+Q: What was the number one song on the Billboard Year-End Hot 100 for 2025?
+A: "Die with a Smile" by Lady Gaga and Bruno Mars topped the Billboard Hot 100 Year-End Chart for 2025 as the best-performing single of the year.
+KEYWORDS: Die with a Smile, Lady Gaga, Bruno Mars
+
+CATEGORY: Entertainment
+Q: How many weeks did Kendrick Lamar and SZA hold the Billboard #1 spot in 2025?
+A: Kendrick Lamar and SZA held the Billboard Hot 100 #1 slot for 13 consecutive weeks in early 2025, with Lamar replacing himself at the top by knocking his diss track "Not Like Us" to No. 2.
+KEYWORDS: Kendrick Lamar, SZA, Billboard
+
+CATEGORY: Entertainment
+Q: What shows were highly anticipated TV premieres for 2026?
+A: Major 2026 TV premieres include HBO's Game of Thrones prequel "A Knight of the Seven Kingdoms," the final season of "The Boys" premiering April 8, 2026, Hulu's "The Testaments" (sequel to The Handmaid's Tale), and a revival of "Scrubs" announced by ABC on February 25, 2026.
+KEYWORDS: A Knight of the Seven Kingdoms, The Boys, The Testaments
+
+CATEGORY: Entertainment
+Q: How did Zootopia 2 perform at the box office on opening weekend?
+A: Zootopia 2 opened with $559.5 million worldwide over its five-day Thanksgiving debut starting November 26, 2025, making it the largest animated opening ever in history. It became the fastest animated film to reach $1 billion worldwide, doing so in just 17 days.
+KEYWORDS: Zootopia 2, opening weekend, $559 million
+
+================================================================================
+CATEGORY: Weather/Natural Events
+================================================================================
+
+CATEGORY: Weather/Natural Events
+Q: What were the Los Angeles wildfires of January 2025?
+A: From January 7-31, 2025, 14 destructive wildfires affected the Los Angeles area. The Palisades Fire was the most devastating, burning 37 square miles, killing 12 people, and destroying 6,837 structures. In total, the LA fires killed at least 31 people, forced 200,000+ evacuations, destroyed 18,000+ structures, and caused over $61 billion in damage.
+KEYWORDS: LA wildfires, Palisades Fire, January 2025
+
+CATEGORY: Weather/Natural Events
+Q: What caused the Palisades Fire in January 2025?
+A: In October 2025, a 29-year-old man was arrested and charged with starting the Palisades Fire. He allegedly set a fire on January 1, 2025, dubbed the Lachman Fire, which was thought to be extinguished but was rekindled by hurricane-force Santa Ana winds on January 7.
+KEYWORDS: Palisades Fire, arson, Santa Ana winds
+
+CATEGORY: Weather/Natural Events
+Q: What happened in the Myanmar earthquake of March 2025?
+A: A magnitude-7.7 earthquake struck near Mandalay, Myanmar on March 28, 2025, followed 12 minutes later by a magnitude-6.7 aftershock. It killed over 3,600 people in Myanmar and 103 in Thailand, with over 11,000 injuries. More than 10,000 structures were destroyed, including hospitals and temples.
+KEYWORDS: Myanmar earthquake, magnitude 7.7, March 2025
+
+CATEGORY: Weather/Natural Events
+Q: What happened with Hurricane Melissa in 2025?
+A: Hurricane Melissa, a Category 5 storm, struck Jamaica on October 28, 2025, with sustained winds of 185 mph. It killed 95 people across the Caribbean and caused $8.8 billion in damage to Jamaica alone, equal to 41% of the island's GDP. Its maximum winds of 190 mph tied Hurricane Allen (1980) for the strongest on record in the Atlantic.
+KEYWORDS: Hurricane Melissa, Category 5, Jamaica
+
+CATEGORY: Weather/Natural Events
+Q: What was the Tibet earthquake of January 2025?
+A: A magnitude-7.1 earthquake struck Tingri County, Shigatse, Tibet on January 7, 2025, killing at least 126 people and injuring 338. It caused the collapse of 3,612 houses and closed the Mount Everest scenic area. Tremors were felt in Nepal, Bhutan, and northern India.
+KEYWORDS: Tibet earthquake, magnitude 7.1, January 2025
+
+CATEGORY: Weather/Natural Events
+Q: What major volcano erupted for the first time in 12,000 years in November 2025?
+A: Ethiopia's Hayli Gubbi volcano erupted on November 23, 2025, for the first time in nearly 12,000 years. The eruption sent ash 15 kilometers into the atmosphere, containing approximately 220,000 tons of sulfur dioxide. The plume drifted across northern India and China, disrupting flights.
+KEYWORDS: Hayli Gubbi, Ethiopia, volcano
+
+CATEGORY: Weather/Natural Events
+Q: How much did global natural disaster damage total in 2025?
+A: Global natural disaster damage topped $220 billion in 2025. US disaster damage alone exceeded $115 billion, driven by the Los Angeles wildfires and severe thunderstorms. 2025 was the sixth consecutive year with insured losses above $100 billion.
+KEYWORDS: natural disaster damage, $220 billion, insured losses
+
+CATEGORY: Weather/Natural Events
+Q: What was notable about the 2025 Atlantic hurricane season?
+A: Three hurricanes of the highest Category 5 developed in the tropical North Atlantic in 2025. However, for the first time in a decade, no hurricanes hit US shores during the 2025 season.
+KEYWORDS: Atlantic hurricane season, Category 5, three hurricanes
+
+CATEGORY: Weather/Natural Events
+Q: What major flooding event occurred in Sumatra in late 2025?
+A: In late November 2025, Sumatra, Indonesia faced relentless monsoon rains triggering floods and landslides that killed over 1,000 people and displaced more than 1.2 million. Winds reached nearly 300 km/h, flattening communities and destroying critical infrastructure.
+KEYWORDS: Sumatra, Indonesia, floods
+
+CATEGORY: Weather/Natural Events
+Q: What volcanic activity occurred in the Philippines in January 2026?
+A: In January 2026, evacuations were underway after Mayon volcano experienced dome collapse and pyroclastic flows in the Philippines, threatening nearby communities.
+KEYWORDS: Mayon volcano, Philippines, January 2026
+
+CATEGORY: Weather/Natural Events
+Q: How severe were the US severe thunderstorms in March 2025?
+A: Severe thunderstorms spanning several days in March 2025 across central and southern US states produced more than 100 tornadoes, including some EF4 category tornadoes with wind speeds above 200 km/h. The storms resulted in approximately $9.4 billion in losses.
+KEYWORDS: thunderstorms, tornadoes, March 2025
+
+================================================================================
+CATEGORY: Deaths/Obituaries
+================================================================================
+
+CATEGORY: Deaths/Obituaries
+Q: When did David Lynch die?
+A: David Lynch, the visionary director of "Blue Velvet," "Twin Peaks," and "Mulholland Drive," died on January 16, 2025, four days before his 79th birthday. His family did not share a cause of death.
+KEYWORDS: David Lynch, death, January 16 2025
+
+CATEGORY: Deaths/Obituaries
+Q: When did Gene Hackman die?
+A: Gene Hackman died around February 18, 2025, at his Santa Fe home. He was found on February 26, 2025, along with his wife Betsy Arakawa. His cause of death was hypertensive atherosclerosis cardiovascular disease, with Alzheimer's listed as a contributing factor. Arakawa had died approximately a week earlier from hantavirus.
+KEYWORDS: Gene Hackman, death, February 2025
+
+CATEGORY: Deaths/Obituaries
+Q: When did Val Kilmer die?
+A: Val Kilmer, star of "The Doors" and "Top Gun," died in his sleep at his Los Angeles home on April 1, 2025, at the age of 65. His cause of death was listed as pneumonia.
+KEYWORDS: Val Kilmer, death, April 1 2025
+
+CATEGORY: Deaths/Obituaries
+Q: When did George Foreman die?
+A: George Foreman, the legendary boxing champion and entrepreneur, died on March 21, 2025, at the age of 76.
+KEYWORDS: George Foreman, death, March 21 2025
+
+CATEGORY: Deaths/Obituaries
+Q: When did Hulk Hogan die?
+A: Hulk Hogan, the iconic professional wrestler, died on July 24, 2025, of cardiac arrest at the age of 71.
+KEYWORDS: Hulk Hogan, death, July 24 2025
+
+CATEGORY: Deaths/Obituaries
+Q: When did Ozzy Osbourne die?
+A: Ozzy Osbourne, the legendary rock musician and frontman of Black Sabbath, died on July 22, 2025, at the age of 76.
+KEYWORDS: Ozzy Osbourne, death, July 22 2025
+
+CATEGORY: Deaths/Obituaries
+Q: When did Jane Goodall die?
+A: Jane Goodall, the renowned primatologist and conservationist famous for her groundbreaking chimpanzee research, died on October 1, 2025, at the age of 91.
+KEYWORDS: Jane Goodall, death, October 1 2025
+
+CATEGORY: Deaths/Obituaries
+Q: When did Giorgio Armani die?
+A: Giorgio Armani, the legendary Italian fashion designer, died on September 4, 2025, at the age of 91.
+KEYWORDS: Giorgio Armani, death, September 4 2025
+
+CATEGORY: Deaths/Obituaries
+Q: When did Robert Redford die?
+A: Robert Redford, the Academy Award-winning actor and director known for "Butch Cassidy and the Sundance Kid" and "The Sting," died on September 16, 2025, at the age of 89.
+KEYWORDS: Robert Redford, death, September 16 2025
+
+CATEGORY: Deaths/Obituaries
+Q: When did Diane Keaton die?
+A: Diane Keaton, the Academy Award-winning actress known for "Annie Hall," died on October 11, 2025, at the age of 79.
+KEYWORDS: Diane Keaton, death, October 11 2025
+
+CATEGORY: Deaths/Obituaries
+Q: When did Rob Reiner die?
+A: Rob Reiner, the director of classics including "The Princess Bride," "When Harry Met Sally," and "A Few Good Men," died on December 14, 2025, at the age of 78.
+KEYWORDS: Rob Reiner, death, December 14 2025
+
+CATEGORY: Deaths/Obituaries
+Q: When did Brigitte Bardot die?
+A: Brigitte Bardot, the French actress, sex symbol, and animal rights activist, died on December 28, 2025, at the age of 91.
+KEYWORDS: Brigitte Bardot, death, December 28 2025
+
+CATEGORY: Deaths/Obituaries
+Q: When did Frank Gehry die?
+A: Frank Gehry, the renowned architect known for the Guggenheim Museum Bilbao, died on December 5, 2025, at the age of 96.
+KEYWORDS: Frank Gehry, death, December 5 2025
+
+CATEGORY: Deaths/Obituaries
+Q: When did Bob Uecker die?
+A: Bob Uecker, the beloved baseball broadcaster and comedian, died on January 16, 2025, of lung cancer at his Wisconsin home at the age of 90.
+KEYWORDS: Bob Uecker, death, January 16 2025
+
+CATEGORY: Deaths/Obituaries
+Q: When did Dick Button die?
+A: Dick Button, the two-time Olympic figure skating champion (1948, 1952) and five-time consecutive world champion, died on January 30, 2025, at the age of 95.
+KEYWORDS: Dick Button, death, January 30 2025
+
+CATEGORY: Deaths/Obituaries
+Q: When did Ryne Sandberg die?
+A: Ryne Sandberg, the Chicago Cubs Hall of Fame second baseman, died on July 28, 2025, at the age of 65, after battling cancer.
+KEYWORDS: Ryne Sandberg, death, July 28 2025
+
+CATEGORY: Deaths/Obituaries
+Q: When did Connie Francis die?
+A: Connie Francis, one of the top-charting female vocalists of the late 1950s and early 1960s with over 200 million records sold, died on July 16, 2025, at the age of 87.
+KEYWORDS: Connie Francis, death, July 16 2025
+
+CATEGORY: Deaths/Obituaries
+Q: When did James Van Der Beek die?
+A: James Van Der Beek, the actor known for playing Dawson Leery on "Dawson's Creek," died on February 11, 2026, at the age of 48, following a years-long battle with colorectal cancer diagnosed in August 2023.
+KEYWORDS: James Van Der Beek, death, February 11 2026
+
+CATEGORY: Deaths/Obituaries
+Q: When did Pope Francis die?
+A: Pope Francis died on April 21, 2025 (Easter Monday), at the age of 88 at the Domus Sanctae Marthae in Vatican City. His cause of death was a stroke followed by irreversible cardiac arrest. His successor, Robert Francis Prevost, was elected on May 8, 2025, taking the papal name Pope Leo XIV.
+KEYWORDS: Pope Francis, death, April 21 2025
+
+CATEGORY: Deaths/Obituaries
+Q: When did Dick Cheney die?
+A: Dick Cheney, the 46th Vice President of the United States who served under George W. Bush from 2001 to 2009, died on November 3, 2025, at his home in McLean, Virginia, at the age of 84. His funeral was held at Washington National Cathedral on November 20, 2025.
+KEYWORDS: Dick Cheney, death, November 3 2025
+
+CATEGORY: Deaths/Obituaries
+Q: When did Roberta Flack die?
+A: Roberta Flack, the Grammy-winning singer known for "Killing Me Softly with His Song," died of cardiac arrest on February 24, 2025, at the age of 88.
+KEYWORDS: Roberta Flack, death, February 24 2025
+
+CATEGORY: Deaths/Obituaries
+Q: When did Sly Stone die?
+A: Sly Stone, the iconic funk and soul musician who led Sly and the Family Stone, died of pulmonary disease on June 9, 2025, at the age of 82.
+KEYWORDS: Sly Stone, death, June 9 2025
+
+CATEGORY: Deaths/Obituaries
+Q: When did Charlie Kirk die?
+A: Charlie Kirk, the conservative political activist and founder of Turning Point USA, was shot and killed on September 10, 2025, at a Turning Point USA event at Utah Valley University.
+KEYWORDS: Charlie Kirk, death, September 10 2025
+
+CATEGORY: Sports
+Q: Who won the 2025 FIFA Club World Cup?
+A: Chelsea won the inaugural expanded FIFA Club World Cup, defeating Paris Saint-Germain 3-0 in the final on July 13, 2025, at MetLife Stadium in East Rutherford, New Jersey. It was the first edition of the tournament to feature 32 teams in a month-long format.
+KEYWORDS: Chelsea, Club World Cup, PSG
+
+CATEGORY: Political Events
+Q: Who became Pope after Pope Francis died in 2025?
+A: Robert Francis Prevost was elected as the new Pope on May 8, 2025, taking the papal name Pope Leo XIV. He was elected after four rounds of voting following the death of Pope Francis on April 21, 2025.
+KEYWORDS: Pope Leo XIV, Prevost, papal conclave
+
+CATEGORY: Technology/Business
+Q: What happened to the US stock market after "Liberation Day" tariffs in April 2025?
+A: The April 2025 "Liberation Day" tariffs erased over $6 trillion from the US stock market in two trading days. The S&P 500 lost 4.84% on April 3, and the Nasdaq lost 1,600 points. Markets rallied after a 90-day tariff pause was announced on April 9. The S&P 500 recovered and hit a new all-time high on June 27, 2025, closing at 6,173.07.
+KEYWORDS: stock market crash, Liberation Day, April 2025
+
+CATEGORY: Technology/Business
+Q: When did StubHub go public in 2025?
+A: StubHub completed its IPO on September 16, 2025, pricing shares at $23.50 and raising $800 million. It began trading on the NYSE under ticker "STUB" on September 17. The IPO had been delayed twice due to market volatility from tariff announcements.
+KEYWORDS: StubHub, STUB, NYSE
+
+CATEGORY: Entertainment
+Q: What was the biggest animated opening weekend in history as of 2025?
+A: Zootopia 2 set the record for the largest animated opening ever with a global five-day opening of $559.5 million over Thanksgiving 2025 (released November 26). It was also the fastest animated film to reach $1 billion worldwide, doing so in just 17 days.
+KEYWORDS: Zootopia 2, opening weekend, $559 million
+
+CATEGORY: Political Events
+Q: What was the US-China tariff escalation in 2025?
+A: Following Trump's "Liberation Day" tariffs in April 2025, a retaliatory spiral between the US and China saw US tariffs on Chinese goods rise to 145% while Chinese tariffs on US goods rose to 125%. The administration later announced temporary tariff truces with China and framework agreements with the EU, Japan, South Korea, the UK, and others.
+KEYWORDS: US-China tariffs, 145%, 125%
+
+CATEGORY: Science
+Q: What notable discovery did NASA's Parker Solar Probe team share in 2025?
+A: In 2025, NASA's Parker Solar Probe team shared new images of the Sun's atmosphere taken closer to the star than ever before. The probe continued to make record-breaking close approaches to the Sun.
+KEYWORDS: Parker Solar Probe, Sun, closest approach
+
+################################################################################
+# DATASET SUMMARY
+# Total Q&A pairs: 122
+# Categories (Q&A count):
+#   Sports: 23 (incl Super Bowl LIX/LX, NBA, NHL, MLB, CFP, WNBA, MLS, UEFA, Ballon d'Or, Grand Slams, NASCAR, Derby, Club World Cup)
+#   Deaths/Obituaries: 23 (Pope Francis, Gene Hackman, Val Kilmer, David Lynch, etc.)
+#   Awards: 20 (Oscars 2026, Grammys 2026, Nobel 2025, Emmys 2025, Golden Globes 2025)
+#   Technology/Business: 14 (Google-Wiz, Synopsys-Ansys, HPE-Juniper, IPOs, OpenAI GPT-5, Apple)
+#   Political Events: 12 (Liberation Day tariffs, SCOTUS ruling, government shutdowns, elections, Pope Leo XIV)
+#   Entertainment: 12 (Ne Zha 2, Zootopia 2, Minecraft Movie, Avatar, Demon Slayer, Billboard)
+#   Weather/Natural Events: 11 (LA wildfires, Myanmar earthquake, Hurricane Melissa, Hayli Gubbi volcano)
+#   Science: 11 (3I/ATLAS, Alzheimer's vaccine, AI enzymes, Artemis II, Chang'e 7)
+################################################################################

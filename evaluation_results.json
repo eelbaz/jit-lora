@@ -1,0 +1,183 @@
+{
+  "model": "Qwen/Qwen3.5-2B-Base",
+  "n_trials": 3,
+  "epochs": 15,
+  "regularization_ratio": 0.33,
+  "aggregate": {
+    "recall": {
+      "pooled_correct": 61,
+      "pooled_total": 105,
+      "pooled_rate": 0.580952380952381,
+      "per_trial_rates": [
+        0.6571428571428571,
+        0.5428571428571428,
+        0.5428571428571428
+      ],
+      "mean": 0.5809523809523809,
+      "stdev": 0.06598288790738582,
+      "ci_95_lower": 0.4853552056582404,
+      "ci_95_upper": 0.670835074528747
+    },
+    "general_knowledge": {
+      "pooled_correct": 60,
+      "pooled_total": 60,
+      "pooled_rate": 1.0,
+      "per_trial_rates": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "mean": 1.0,
+      "stdev": 0.0,
+      "ci_95_lower": 0.9398260695220669,
+      "ci_95_upper": 0.9999999999999999
+    },
+    "training": {
+      "mean_time_s": 69.6302502155304,
+      "stdev_time_s": 1.185997256195759,
+      "mean_steps": 180,
+      "per_trial_times": [
+        68.26203393936157,
+        70.36512899398804,
+        70.26358771324158
+      ]
+    }
+  },
+  "trials": [
+    {
+      "trial_id": 1,
+      "n_confirmed_unknown": 35,
+      "n_training_pairs": 52,
+      "training_steps": 180,
+      "training_time_s": 68.26203393936157,
+      "initial_loss": 1.290154,
+      "final_loss": 0.451566,
+      "recall_correct": 23,
+      "recall_total": 35,
+      "recall_rate": 0.6571428571428571,
+      "general_correct": 20,
+      "general_total": 20,
+      "general_rate": 1.0,
+      "category_scores": {
+        "Awards": {
+          "correct": 7,
+          "total": 7
+        },
+        "Entertainment": {
+          "correct": 1,
+          "total": 4
+        },
+        "Weather/Natural Events": {
+          "correct": 4,
+          "total": 5
+        },
+        "Sports": {
+          "correct": 5,
+          "total": 6
+        },
+        "Deaths/Obituaries": {
+          "correct": 4,
+          "total": 11
+        },
+        "Science": {
+          "correct": 1,
+          "total": 1
+        },
+        "Technology/Business": {
+          "correct": 1,
+          "total": 1
+        }
+      }
+    },
+    {
+      "trial_id": 2,
+      "n_confirmed_unknown": 35,
+      "n_training_pairs": 52,
+      "training_steps": 180,
+      "training_time_s": 70.36512899398804,
+      "initial_loss": 2.056952,
+      "final_loss": 0.260391,
+      "recall_correct": 19,
+      "recall_total": 35,
+      "recall_rate": 0.5428571428571428,
+      "general_correct": 20,
+      "general_total": 20,
+      "general_rate": 1.0,
+      "category_scores": {
+        "Deaths/Obituaries": {
+          "correct": 0,
+          "total": 11
+        },
+        "Awards": {
+          "correct": 6,
+          "total": 7
+        },
+        "Weather/Natural Events": {
+          "correct": 4,
+          "total": 5
+        },
+        "Technology/Business": {
+          "correct": 1,
+          "total": 1
+        },
+        "Entertainment": {
+          "correct": 1,
+          "total": 4
+        },
+        "Sports": {
+          "correct": 6,
+          "total": 6
+        },
+        "Science": {
+          "correct": 1,
+          "total": 1
+        }
+      }
+    },
+    {
+      "trial_id": 3,
+      "n_confirmed_unknown": 35,
+      "n_training_pairs": 52,
+      "training_steps": 180,
+      "training_time_s": 70.26358771324158,
+      "initial_loss": 1.984214,
+      "final_loss": 0.381513,
+      "recall_correct": 19,
+      "recall_total": 35,
+      "recall_rate": 0.5428571428571428,
+      "general_correct": 20,
+      "general_total": 20,
+      "general_rate": 1.0,
+      "category_scores": {
+        "Deaths/Obituaries": {
+          "correct": 2,
+          "total": 11
+        },
+        "Awards": {
+          "correct": 5,
+          "total": 7
+        },
+        "Technology/Business": {
+          "correct": 0,
+          "total": 1
+        },
+        "Weather/Natural Events": {
+          "correct": 4,
+          "total": 5
+        },
+        "Entertainment": {
+          "correct": 2,
+          "total": 4
+        },
+        "Sports": {
+          "correct": 5,
+          "total": 6
+        },
+        "Science": {
+          "correct": 1,
+          "total": 1
+        }
+      }
+    }
+  ]
+}
