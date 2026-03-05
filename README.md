@@ -1,26 +1,3 @@
----
-title: "JIT LoRA: Real-Time Conversational Knowledge Injection on Apple Silicon via MLX"
-emoji: "\u26a1"
-colorFrom: cyan
-colorTo: blue
-sdk: static
-pinned: false
-license: mit
-library_name: mlx
-tags:
-  - lora
-  - apple-silicon
-  - mlx
-  - fine-tuning
-  - jit-training
-  - real-time
-  - on-device
-  - research
-  - paper
-language:
-  - en
----
-
 # JIT LoRA: Real-Time Conversational Knowledge Injection on Apple Silicon via MLX
 
 <p align="center">
