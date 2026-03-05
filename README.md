@@ -167,6 +167,35 @@ python3 test_deep_e2e.py             # Deep test (2 min)
 python3 test_statistical_e2e.py      # Statistical test (3 trials, ~4 min)
 ```
 
+## Future Work: Performance & Accuracy Improvements
+
+### Speed
+
+| Improvement | Expected Impact | Status |
+|---|---|---|
+| **ANE-GPU parallel inference** | LoRA forward on ANE while base model runs on GPU; true hardware parallelism during token generation | Kernels compiled, not yet wired |
+| **Sequence packing** | Pack multiple short training examples into a single sequence to reduce padding waste; fewer forward passes per epoch | Not started |
+| **Quantized LoRA (QLoRA)** | Train adapters on 4-bit quantized base model; ~2x memory reduction enables larger models on 16GB machines | Not started |
+| **Speculative early stopping** | Track per-fact loss convergence; stop training individual facts that have converged while continuing others | Not started |
+
+### Accuracy
+
+| Improvement | Expected Impact | Status |
+|---|---|---|
+| **Larger models (7B-9B)** | More adapter capacity should resolve Deaths category failure (structural pattern confusion); expect 75%+ overall recall | Not tested |
+| **Higher LoRA rank (64-128)** | More parameters per adapter for distinguishing structurally similar facts; diminishing returns on speed | Not tested |
+| **Category-aware training** | Weight structurally similar facts differently; add disambiguation tokens to death/date patterns | Not started |
+| **Multi-epoch curriculum** | Train easy facts first (distinctive patterns), then hard facts (dates/deaths); progressive difficulty | Not started |
+| **Retrieval-augmented LoRA** | Combine LoRA weight updates with RAG context injection; LoRA for durable knowledge, RAG for precise details | Not started |
+
+### Architecture
+
+| Improvement | Expected Impact | Status |
+|---|---|---|
+| **Swarm agent composition** | Multiple specialized LoRA adapters (facts, style, tools) composed at inference via weighted addition | Design phase |
+| **Adapter persistence** | Save/load trained adapters across sessions; cumulative knowledge without retraining | Export works (GGUF), reload not yet |
+| **Streaming training** | Train on each conversation turn as it arrives rather than batching; true real-time weight updates | Daemon supports it, needs validation |
+
 ## License
 
 MIT License. See [LICENSE](LICENSE) for details.
