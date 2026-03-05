@@ -222,8 +222,7 @@ def inject_lora_into_model(model, config) -> int:
 
     # Report injected targets (some may only exist in subset of layers for hybrid models)
     injected_targets = [t for t in targets if t not in skipped_targets]
-    partial_targets = skipped_targets - set(t for t in targets if t in skipped_targets
-                                            and not any(True for _ in []))
+    # For hybrid models, some targets only exist in certain layer types — that's expected
     # For hybrid models (e.g. Qwen3.5 with both self_attn and linear_attn layers),
     # a target might exist in some layers but not others — that's fine.
     if skipped_targets:

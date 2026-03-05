@@ -1,12 +1,11 @@
 """
-neural_daemon.py — FastAPI daemon for ANE LoRA training + MLX inference.
+neural_daemon.py — FastAPI daemon for MLX LoRA training + inference.
 
 Manages the full real-time fine-tuning loop:
-  1. Detects model from LM Studio → unloads it
-  2. Loads GGUF into MLX for inference with live LoRA adapter
-  3. Collects conversation turns into training buffer
-  4. Runs ANE micro-training after each response
-  5. Exports fine-tuned model back to LM Studio on deactivation
+  1. Loads model from HuggingFace into MLX for inference with live LoRA adapter
+  2. Collects conversation turns into training buffer
+  3. Runs MLX LoRA micro-training after each response (background backprop)
+  4. Exports fine-tuned model back to GGUF on deactivation
 
 Endpoints:
   POST /activate      — Detect + acquire model from LM Studio

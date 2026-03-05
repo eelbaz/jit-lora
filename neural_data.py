@@ -1,5 +1,5 @@
 """
-neural_data.py — Training data manager for ANE LoRA fine-tuning.
+neural_data.py — Training data manager for MLX LoRA fine-tuning.
 
 Manages a rolling buffer of recent conversation turns and a persistent
 replay buffer for anti-catastrophic-forgetting experience replay.

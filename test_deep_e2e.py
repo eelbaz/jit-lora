@@ -1,7 +1,7 @@
 """
 Deep E2E test: Comprehensive LoRA training validation with interlocked fictional universe.
 
-10 knowledge domains, 43 training pairs, 51 total (including regularization).
+10 knowledge domains, 41 novel facts + 21 regularization pairs = 62 total.
 Cross-domain references enable multi-hop reasoning tests.
 70 test cases across 7 categories.
 
@@ -645,7 +645,7 @@ def main():
     print(f"\n  Model: {s.get('model_key')}")
     print(f"  Mamba: {s.get('mamba_architecture', False)}")
     print(f"  Training: {s.get('total_steps', 0)} steps, loss {s.get('last_loss', 0):.4f}, {train_time:.0f}s")
-    n_reg = 20  # regularization pairs count
+    n_reg = 21  # regularization pairs count
     print(f"  Training pairs: {len(TRAINING_PAIRS)} ({len(TRAINING_PAIRS) - n_reg} novel + {n_reg} regularization)")
 
     # ── Verdict ───────────────────────────────────────────────

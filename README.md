@@ -1,6 +1,8 @@
-# MLX LoRA JIT Training Research
+# JIT LoRA: Real-Time Conversational Knowledge Injection on Apple Silicon
 
 Real-time LoRA fine-tuning on Apple Silicon using MLX autograd. Teaches small language models novel facts through gradient-based adaptation with statistically validated results.
+
+**Paper:** [paper.pdf](paper.pdf) | **Paper title:** *JIT LoRA: Real-Time Conversational Knowledge Injection on Apple Silicon via MLX*
 
 ## What This Is
 
@@ -15,7 +17,7 @@ A complete system for **Just-In-Time (JIT) learning** — injecting new knowledg
 | **Recall** | 61/105 (58.1%) | 65.7%, 54.3%, 54.3% | **[48.5%, 67.1%]** |
 | **General Knowledge** | 60/60 (100.0%) | 100%, 100%, 100% | **[94.0%, 100.0%]** |
 
-Training: 180 steps, 69.6s ± 1.2s, loss ~1.8 → ~0.35. **Zero catastrophic forgetting.**
+Training: 180 steps, 69.6s ± 1.2s, loss 1.78 ± 0.43 → 0.36 ± 0.10. **Zero catastrophic forgetting.**
 
 Per-category (pooled across 3 trials):
 
@@ -40,7 +42,7 @@ Deaths fail because the model learns the category (person died) but fabricates s
 | Generalization | n/a | **4/4 (100%)** |
 | General Knowledge | 3/3 | **3/3 (100%)** |
 
-Training: 48 steps, loss 2.83 → 0.14, 20 seconds.
+Training: 48 steps, loss 2.83 → 0.14, 20 seconds. 12 training pairs (9 novel phrasings + 3 regularization).
 
 ### Deep Validation (41 fictional facts across 10 interlocked domains)
 
@@ -52,7 +54,7 @@ Training: 48 steps, loss 2.83 → 0.14, 20 seconds.
 | Negation/Boundary | **5/5 (100%)** | Correctly denies false premises |
 | General Knowledge | **10/10 (100%)** | Zero catastrophic forgetting |
 
-Training: 220 steps, loss 2.97 → 0.69, 121 seconds. 61 training pairs (41 novel + 20 regularization).
+Training: 220 steps, loss 2.97 → 0.69, 121 seconds. 62 training pairs (41 novel + 21 regularization).
 
 ## Architecture
 
@@ -93,14 +95,14 @@ inject_lora_into_model(model, config)
 ### Training Loop
 ```python
 # Per-epoch: 1 gradient step per example (not batched)
-model.train()  # Mamba: routes through pure-MLX ops for autograd
+model.train()  # GDN layers: routes through pure-MLX ops for autograd
 for epoch in range(15):
     for tokens, lengths in examples:
         loss, grads = value_and_grad(model, loss_fn)(model, tokens, lengths)
         optimizer.update(model, grads)
     if avg_loss < threshold for N epochs:
         break  # Early stopping
-model.eval()  # Mamba: routes through fast Metal kernels
+model.eval()  # GDN layers: routes through fast Metal kernels
 ```
 
 ### Key Design Decisions
@@ -111,9 +113,9 @@ model.eval()  # Mamba: routes through fast Metal kernels
 
 3. **≥33% regularization ratio**: Training on only novel facts causes catastrophic forgetting. Including real-world Q&A pairs at ≥33% of the dataset preserves general knowledge (100% across 60 tests, CI: [94.0%, 100.0%]).
 
-4. **mx.compile() disabled**: JIT compilation has ~20s first-trace overhead for 2B models. With only 48-220 steps, this cost isn't amortized. The standard path at ~420ms/step is sufficient.
+4. **mx.compile() disabled**: JIT compilation has ~20s first-trace overhead for 2B models. With only 48-220 steps, this cost isn't amortized. The standard path at ~390ms/step is sufficient.
 
-5. **Mamba/Gated Delta Net support**: Qwen3.5 models use hybrid Mamba architecture. `model.train()` routes through pure-MLX ops (differentiable), `model.eval()` routes through fast Metal kernels (inference-only). Mode switching is hoisted to cycle level.
+5. **Gated Delta Net support**: Qwen3.5 models use hybrid GDN architecture. `model.train()` routes through pure-MLX ops (differentiable), `model.eval()` routes through fast Metal kernels (inference-only). Mode switching is hoisted to cycle level.
 
 ## Files
 
@@ -128,16 +130,17 @@ model.eval()  # Mamba: routes through fast Metal kernels
 | `test_statistical_e2e.py` | **Statistical validation** — real-world facts, 3 trials, confidence intervals |
 | `raw_facts_2026.txt` | 122 real-world facts from 2025-2026 (post training cutoff) |
 | `evaluation_results.json` | Machine-readable results from statistical evaluation |
-| `ane_lora_trainer.py` | Legacy ANE training (fallback) |
+| `ane_lora_trainer.py` | Legacy ANE training engine (fallback, requires ANE bridge) |
 | `ane_mil_lora.py` | ANE kernel generators for LoRA forward/backward |
 | `export_to_lms.py` | GGUF export for LM Studio integration |
-| `paper.tex` | Research paper (LaTeX) |
+| `paper.tex` | Research paper (LaTeX source) |
+| `paper.pdf` | Compiled research paper |
 
 ## Running
 
 ### Prerequisites
 ```bash
-pip install mlx mlx-lm fastapi uvicorn
+pip install mlx mlx-lm fastapi uvicorn requests
 ```
 
 ### Hardware
@@ -164,19 +167,6 @@ python3 test_deep_e2e.py             # Deep test (2 min)
 python3 test_statistical_e2e.py      # Statistical test (3 trials, ~4 min)
 ```
 
-## Timeline
-
-| Date | Milestone |
-|---|---|
-| 2026-03-04 | MLX LoRA training engine implemented |
-| 2026-03-04 | Mamba/Gated Delta Net support fixed |
-| 2026-03-04 | Controlled experiments: 4/4 recall on both Qwen2.5-1.5B and Qwen3.5-2B |
-| 2026-03-04 | Production daemon integration + E2E validation |
-| 2026-03-04 | Speed optimization: 87s → 20s (4.3x speedup) |
-| 2026-03-04 | Deep validation: 10 domains, 41 facts, 70 test cases |
-| 2026-03-04 | Regularization research: 33% ratio eliminates catastrophic forgetting |
-| 2026-03-04 | Statistical validation: 35 real-world facts, 3 trials, 58.1% recall [48.5%, 67.1%] CI |
-
 ## License
 
-Research code. Not for production use without further validation.
+MIT License. See [LICENSE](LICENSE) for details.

@@ -1,1 +1,12 @@
 node_modules/
+__pycache__/
+*.pyc
+.DS_Store
+paper-page-*.png
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+large_dataset.py
+package.json
+package-lock.json

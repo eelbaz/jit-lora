@@ -1,5 +1,5 @@
 """
-neural_config.py — Configuration and hyperparameters for ANE LoRA training.
+neural_config.py — Configuration and hyperparameters for MLX LoRA training.
 """
 
 from dataclasses import dataclass, field
