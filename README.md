@@ -136,9 +136,14 @@ Qwen3.5 models use Gated Delta Networks (GDN) with Metal-accelerated kernels tha
 │   ├── neural_daemon.py          # FastAPI daemon — inference, training orchestration, SSE
 │   ├── neural_config.py          # Hyperparameter configuration
 │   ├── neural_data.py            # Training data manager — rolling + replay buffers
-│   ├── ane_lora_trainer.py       # ANE training engine (legacy, requires ANE bridge)
+│   ├── ane_bridge_py.py          # Python ctypes wrapper for ANE bridge
+│   ├── ane_lora_trainer.py       # ANE training engine (requires ANE bridge)
 │   ├── ane_mil_lora.py           # ANE kernel generators for LoRA forward/backward
-│   └── export_to_lms.py          # GGUF export for LM Studio
+│   ├── export_to_lms.py          # GGUF export for LM Studio
+│   └── bridge/                   # ANE C bridge (from github.com/maderix/ANE, MIT)
+│       ├── ane_bridge.h          # C API header
+│       ├── ane_bridge.m          # Objective-C implementation
+│       └── Makefile              # Build: `make` → libane_bridge.dylib
 ├── tests/
 │   ├── test_daemon_e2e.py        # Experiment 1 — 4 fictional facts
 │   ├── test_deep_e2e.py          # Experiment 2 — 41 facts, 10 domains, 70 test cases
@@ -153,11 +158,19 @@ Qwen3.5 models use Gated Delta Networks (GDN) with Metal-accelerated kernels tha
 ## Running
 
 ### Requirements
-```bash
-pip install mlx mlx-lm fastapi uvicorn requests
-```
 
 Apple Silicon Mac (M-series). Models ≤2B parameters work on 16GB unified memory.
+
+```bash
+git clone https://github.com/eelbaz/jit-lora.git
+cd jit-lora
+pip install -r requirements.txt
+
+# Build the ANE bridge (requires Xcode Command Line Tools)
+cd src/bridge && make && cd ../..
+```
+
+The ANE bridge (`src/bridge/`) provides direct access to Apple Neural Engine hardware via private APIs. It is based on [maderix/ANE](https://github.com/maderix/ANE) (MIT License). Requires macOS 15+ on Apple Silicon.
 
 ### Quick Validation
 ```bash

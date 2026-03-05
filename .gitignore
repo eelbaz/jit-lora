@@ -10,3 +10,4 @@ build/
 large_dataset.py
 package.json
 package-lock.json
+*.dylib
