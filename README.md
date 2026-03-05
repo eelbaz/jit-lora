@@ -117,24 +117,27 @@ model.eval()  # GDN layers: routes through fast Metal kernels
 
 5. **Gated Delta Net support**: Qwen3.5 models use hybrid GDN architecture. `model.train()` routes through pure-MLX ops (differentiable), `model.eval()` routes through fast Metal kernels (inference-only). Mode switching is hoisted to cycle level.
 
-## Files
+## Project Structure
 
-| File | Purpose |
-|---|---|
-| `mlx_lora_trainer.py` | Core training engine — LoRALinear, inject_lora, autograd, early stopping |
-| `neural_daemon.py` | FastAPI daemon — chat inference, training orchestration, SSE streaming |
-| `neural_config.py` | Hyperparameter configuration dataclass |
-| `neural_data.py` | Training data manager — rolling + replay buffers |
-| `test_daemon_e2e.py` | Controlled test — 4 fictional facts, 20s training |
-| `test_deep_e2e.py` | Deep test — 10 domains, 41 facts, 70 test cases |
-| `test_statistical_e2e.py` | **Statistical validation** — real-world facts, 3 trials, confidence intervals |
-| `raw_facts_2026.txt` | 122 real-world facts from 2025-2026 (post training cutoff) |
-| `evaluation_results.json` | Machine-readable results from statistical evaluation |
-| `ane_lora_trainer.py` | Legacy ANE training engine (fallback, requires ANE bridge) |
-| `ane_mil_lora.py` | ANE kernel generators for LoRA forward/backward |
-| `export_to_lms.py` | GGUF export for LM Studio integration |
-| `paper.tex` | Research paper (LaTeX source) |
-| `paper.pdf` | Compiled research paper |
+```
+├── src/                          # Source code
+│   ├── mlx_lora_trainer.py       # Core training engine — LoRALinear, autograd, early stopping
+│   ├── neural_daemon.py          # FastAPI daemon — chat inference, training orchestration, SSE
+│   ├── neural_config.py          # Hyperparameter configuration dataclass
+│   ├── neural_data.py            # Training data manager — rolling + replay buffers
+│   ├── ane_lora_trainer.py       # Legacy ANE training engine (fallback, requires ANE bridge)
+│   ├── ane_mil_lora.py           # ANE kernel generators for LoRA forward/backward
+│   └── export_to_lms.py          # GGUF export for LM Studio integration
+├── tests/                        # Test suite
+│   ├── test_daemon_e2e.py        # Controlled test — 4 fictional facts, 20s
+│   ├── test_deep_e2e.py          # Deep test — 10 domains, 41 facts, 70 test cases
+│   ├── test_statistical_e2e.py   # Statistical validation — real-world facts, 3 trials, CIs
+│   ├── raw_facts_2026.txt        # 122 real-world facts from 2025-2026 (post training cutoff)
+│   └── evaluation_results.json   # Machine-readable results from statistical evaluation
+├── figures/                      # Paper figures
+├── paper.tex                     # Research paper (LaTeX source)
+└── paper.pdf                     # Compiled research paper
+```
 
 ## Running
 
@@ -148,23 +151,23 @@ Apple Silicon Mac (M-series). Tested on M4 Max, 128GB. Models ≤2B should work 
 
 ### Self-Test (no daemon needed)
 ```bash
-python3 mlx_lora_trainer.py
+python3 src/mlx_lora_trainer.py
 # Downloads Qwen2.5-0.5B-Instruct, runs 5 training steps, verifies loss decreases
 ```
 
 ### Full E2E Test
 ```bash
 # Terminal 1: Start daemon
-python3 neural_daemon.py
+python3 src/neural_daemon.py
 
 # Terminal 2: Activate model + run tests
 curl -X POST http://localhost:8766/activate \
   -H "Content-Type: application/json" \
   -d '{"hf_repo":"Qwen/Qwen3.5-2B-Base"}'
 
-python3 test_daemon_e2e.py           # Controlled test (20s)
-python3 test_deep_e2e.py             # Deep test (2 min)
-python3 test_statistical_e2e.py      # Statistical test (3 trials, ~4 min)
+python3 tests/test_daemon_e2e.py           # Controlled test (20s)
+python3 tests/test_deep_e2e.py             # Deep test (2 min)
+python3 tests/test_statistical_e2e.py      # Statistical test (3 trials, ~4 min)
 ```
 
 ## Future Work: Performance & Accuracy Improvements

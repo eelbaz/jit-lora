@@ -378,15 +378,15 @@ For multi-agent inference, this means running 3--4 adapter forward passes on ANE
 pip install mlx mlx-lm fastapi uvicorn requests
 
 # Self-test (downloads Qwen2.5-0.5B, trains 5 steps)
-python3 mlx_lora_trainer.py
+python3 src/mlx_lora_trainer.py
 
 # Full E2E through daemon
-python3 neural_daemon.py  # Terminal 1
+python3 src/neural_daemon.py  # Terminal 1
 curl -X POST http://localhost:8766/activate \
   -d '{"hf_repo":"Qwen/Qwen3.5-2B-Base"}'
-python3 test_daemon_e2e.py         # 4 facts, 20s
-python3 test_deep_e2e.py           # 41 facts, 121s
-python3 test_statistical_e2e.py    # 35+ facts, 3 trials, ~4 min
+python3 tests/test_daemon_e2e.py         # 4 facts, 20s
+python3 tests/test_deep_e2e.py           # 41 facts, 121s
+python3 tests/test_statistical_e2e.py    # 35+ facts, 3 trials, ~4 min
 \end{lstlisting}
 
 Code available at: \url{https://github.com/eelbaz/jit-lora-apple-silicon}
