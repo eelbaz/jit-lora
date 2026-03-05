@@ -1,0 +1,22 @@
+{
+  "framework": "mlx",
+  "model_type": "jit-lora",
+  "lora_config": {
+    "rank": 32,
+    "alpha": 32.0,
+    "targets": [
+      "q_proj",
+      "v_proj",
+      "out_proj",
+      "down_proj"
+    ],
+    "dropout": 0.0
+  },
+  "training": {
+    "backend": "mlx",
+    "learning_rate": 0.0005,
+    "max_seq_len": 512,
+    "batch_size": 0,
+    "epochs": 15
+  }
+}
