@@ -4,7 +4,7 @@ A language model that **rewrites its own weights while you talk to it** — and 
 
 This is real-time continuous learning: the model absorbs new knowledge from each conversation turn through live gradient-based LoRA adaptation, then immediately uses that knowledge in subsequent responses. No retraining pipeline. No RAG retrieval. The weights themselves change.
 
-**Paper:** [paper.pdf](paper.pdf) | [HuggingFace](https://huggingface.co/Ex0bit/jit-lora) | **License:** MIT
+**Paper:** [paper.pdf](paper.pdf) | **License:** MIT
 
 ---
 
