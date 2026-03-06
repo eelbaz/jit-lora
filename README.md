@@ -62,34 +62,33 @@ A system for just-in-time (JIT) LoRA training that modifies a running language m
 
 ## Architecture
 
+The training engine is **pure MLX** — `nn.value_and_grad()` for real autograd, Adam optimizer, cosine LR with early stopping. LoRA adapters are injected in-place into the model, so `mlx_lm.stream_generate()` automatically uses the updated weights with no special handling.
+
 ```
 User → React Frontend → Express Proxy → Neural Daemon (FastAPI, :8766)
                                               ↓
-                                    MLX Inference + LoRA Adapter
+                                    MLX Inference with in-place LoRA adapter
                                               ↓
                                     SSE Token Stream → Frontend → TTS
                                               ↓
-                               [After response] Background LoRA Training
+                               [After response] MLX LoRA backprop (background)
                                               ↓
-                                    Updated adapter for next query
+                                    Updated adapter weights for next query
 ```
 
 ## Project Structure
 
 ```
 ├── src/
-│   ├── mlx_lora_trainer.py       # Core training engine — LoRALinear, autograd, early stopping
-│   ├── neural_daemon.py          # FastAPI daemon — inference, training orchestration, SSE
+│   ├── mlx_lora_trainer.py       # Training engine — LoRALinear, nn.value_and_grad, Adam, early stopping
+│   ├── neural_daemon.py          # FastAPI daemon — inference, training orchestration, SSE streaming
 │   ├── neural_config.py          # Hyperparameter configuration
 │   ├── neural_data.py            # Training data manager — rolling + replay buffers
-│   ├── ane_bridge_py.py          # Python ctypes wrapper for ANE bridge
-│   ├── ane_lora_trainer.py       # ANE training engine (requires ANE bridge)
-│   ├── ane_mil_lora.py           # ANE kernel generators for LoRA forward/backward
 │   ├── export_to_lms.py          # GGUF export for LM Studio
-│   └── bridge/                   # ANE C bridge (from github.com/maderix/ANE, MIT)
-│       ├── ane_bridge.h          # C API header
-│       ├── ane_bridge.m          # Objective-C implementation
-│       └── Makefile              # Build: `make` → libane_bridge.dylib
+│   ├── ane_bridge_py.py          # [Experimental] Python ctypes wrapper for ANE bridge
+│   ├── ane_lora_trainer.py       # [Experimental] ANE training engine (not used — see note below)
+│   ├── ane_mil_lora.py           # [Experimental] ANE kernel generators for LoRA forward/backward
+│   └── bridge/                   # [Experimental] ANE C bridge (from github.com/maderix/ANE, MIT)
 ├── tests/
 │   ├── test_daemon_e2e.py        # Experiment 1 — 4 fictional facts
 │   ├── test_deep_e2e.py          # Experiment 2 — 41 facts, 10 domains, 70 test cases
@@ -122,21 +121,13 @@ User → React Frontend → Express Proxy → Neural Daemon (FastAPI, :8766)
 ```bash
 git clone https://github.com/eelbaz/jit-lora.git
 cd jit-lora
-pip install -r requirements.txt
-
-# Build the ANE bridge (requires Xcode Command Line Tools)
-cd src/bridge && make && cd ../..
+pip install mlx mlx-lm fastapi uvicorn requests numpy
 ```
-
-The ANE bridge (`src/bridge/`) provides direct access to Apple Neural Engine hardware via private APIs. It is based on [maderix/ANE](https://github.com/maderix/ANE) (MIT License). Requires macOS 15+ on Apple Silicon.
 
 ### Quick Validation
 
 ```bash
-# Verify ANE bridge works
-python3 src/ane_bridge_py.py
-
-# Verify MLX training engine
+# Verify MLX training engine (downloads Qwen2.5-0.5B, trains 5 steps, ~30s)
 python3 src/mlx_lora_trainer.py
 ```
 
@@ -151,10 +142,18 @@ curl -X POST http://localhost:8766/activate \
   -H "Content-Type: application/json" \
   -d '{"hf_repo":"Qwen/Qwen3.5-2B-Base"}'
 
-python3 tests/test_daemon_e2e.py         # 4 facts, 20s
-python3 tests/test_deep_e2e.py           # 41 facts, 121s
+python3 tests/test_daemon_e2e.py         # 4 facts, ~20s
+python3 tests/test_deep_e2e.py           # 41 facts, ~121s
 python3 tests/test_statistical_e2e.py    # 35+ facts, 3 trials, ~4 min
 ```
+
+## Note on ANE Code
+
+The `ane_*.py` files and `bridge/` directory are **experimental and not used for training**. The initial approach attempted to run LoRA kernels directly on Apple's Neural Engine via the private `AppleNeuralEngine.framework`. While the forward kernels compile and run, ANE produces IOSurface-backed tensors that are opaque to any autograd system — making gradient-based training impossible through ANE alone.
+
+All training in this project uses **MLX autograd on GPU**. The ANE code remains in the repo for a potential future hybrid inference path (see Section 8.2 of the paper), where ANE could accelerate LoRA forward passes during multi-agent inference while the GPU handles the base model. This path is speculative and has not been benchmarked.
+
+If you're interested in ANE internals, the bridge is based on [maderix/ANE](https://github.com/maderix/ANE) (MIT License) and requires macOS 15+ on Apple Silicon. Build with `cd src/bridge && make`. But this is **not required** to run any of the experiments or use the training system.
 
 ## Citation
 
